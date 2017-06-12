@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="card_sensor_height">250px</dimen>
+    <dimen name="card_sensor_margin">10px</dimen>
+</resources>

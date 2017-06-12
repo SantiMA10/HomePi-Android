@@ -94,10 +94,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         break;
                     case "temperature":
                         viewHolder.setStatus(model.getStatus() + "º");
+                        viewHolder.getCardButton().setText(getString(R.string.actualizar));
+                        viewHolder.getCardButton().setEnabled(true);
                         setupCard(viewHolder, model, this.getRef(position));
                         break;
                     default:
                         viewHolder.setStatus(model.getStatus() + "%");
+                        viewHolder.getCardButton().setText(getString(R.string.actualizar));
+                        viewHolder.getCardButton().setEnabled(true);
                         setupCard(viewHolder, model, this.getRef(position));
                         break;
 

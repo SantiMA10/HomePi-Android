@@ -2,8 +2,11 @@ package xyz.santima.homepi.model;
 
 import android.util.Log;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
+import java.util.TimeZone;
 
 /**
  * Created by GiantsV3 on 12/06/2017.
@@ -34,8 +37,21 @@ public class Service {
     }
 
     public void setDate(String date) {
-        Log.d("setDate", date);
+
         this.date = date;
+
+    }
+
+    public String getFormatDate(){
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+            SimpleDateFormat dt1 = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            return dt1.format(sdf.parse(date));
+        } catch (ParseException e){
+            return "Error";
+        }
     }
 
     public String getStatus() {

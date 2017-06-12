@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected void populateViewHolder(ServiceHolder viewHolder, final Service model, final int position) {
                 viewHolder.setStatus(model.getStatus() + " " + (model.getType().equals("temperature") ? "º" : "%") );
-                viewHolder.setDate(model.getDate());
+                viewHolder.setDate(model.getFormatDate());
                 viewHolder.setPlace(model.getPlace());
 
                 final DatabaseReference ref = this.getRef(position);

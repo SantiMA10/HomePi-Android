@@ -1,4 +1,54 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
     <string name="app_name">HomePi</string>
     <string name="actualizar">Actualizar</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="default_toolbar_title" translatable="false">@string/app_name</string>
+    <string name="progress_dialog_loading" translation_description="Loading text in dialog">Cargando…</string>
+    <string name="sign_in_default" translation_description="Button text to sign in">Iniciar sesión</string>
+    <string name="general_error" translation_description="Toast text flashing general error">Algo ha salido mal.</string>
+
+    <!-- Email common-->
+    <string name="next_default" translation_description="Button text to continue">Siguiente</string>
+    <string name="email_hint" translation_description="Hint in email input field">Email</string>
+    <string name="phone_hint" translation_description="Hint for phone input field">Telefono</string>
+    <string name="password_hint" translation_description="Hint for password input field">Contraseña</string>
+    <string name="required_field" translation_description="Inline error for required field">No puede dejarlo sin rellenar.</string>
+    <string name="invalid_email_address" translation_description="Inline error for invalid email address">No es un email correcto</string>
+    <string name="missing_email_address" translation_description="Inline error for empty email address in input field">Introduce tu correo electronico</string>
+    <string name="progress_dialog_checking_accounts" translation_description="Progress dialog text while checking for existing accounts">Comprobando si existe una cuenta…</string>
+    <string name="error_email_does_not_exist" translation_description="Inline error when user attempt signin with invalid account">No existe ningun usuario con ese email</string>
+
+
+    <!-- Idp/Email welcome back -->
+    <string name="title_welcome_back_idp_prompt" translatable="false">¡Bienvenido!</string>
+    <string name="title_welcome_back_password_prompt" translatable="false">@string/sign_in_default</string>
+    <string name="welcome_back_idp_header" translation_description="Inline subtitle to users whose signup was interrupted since an existing account was detected">Existe una cuenta con ese email</string>
+    <string name="welcome_back_email_header" translation_description="Message for returning users">Welcome back!</string>
+    <string name="welcome_back_idp_prompt" translation_description="Message to users that need to signin using existing IDP accounts">
+        Existe una cuenta con <xliff:g id="email_addr" example="jane.doe@example.com" translation_description="">%1$s</xliff:g>.
+        Inicia sesión con <xliff:g id="provider_name" example="Google" translation_description="">%2$s</xliff:g> para continuar.
+    </string>
+    <string name="welcome_back_password_prompt_body" translation_description="Message to users that need to signin using existing email accounts">
+        Ya has usado <xliff:g id="email_addr" example="jane.doe@example.com" translation_description="">%1$s</xliff:g>
+        para iniciar sesión. Introduce tu contraseña para iniciar sesión.
+    </string>
+    <string name="progress_dialog_signing_in" translation_description="Progress dialog text">Iniciando sesión…</string>
+    <string name="trouble_signing_in" translation_description="Link leading to forgot password flow">¿Algún problema al iniciar sesión?</string>
+
+    <!-- Password recovery -->
+    <string name="title_recover_password_activity" translation_description="Recover password screen title">Recuperar contraseña</string>
+    <string name="title_confirm_recover_password" translation_description="Password recovery confirmation message">Revisa tu correo electronico</string>
+    <string name="password_recovery_body" translation_description="Password recovery message body">Se enviara un correo electronico con las instrucciones para recuperar tu contraseña.</string>
+    <string name="button_text_send" translation_description="Button text to send recovery email">Recuperar contraseña</string>
+    <string name="confirm_recovery_body" translation_description="Alert dialog displayed after password recovery email is sent">Sigue las instrucciones enviadas a %1$s para recuperar la contraseña.</string>
+    <string name="progress_dialog_sending" translation_description="Progress dialog while password recovery email is being sent">Enviando…</string>
+    <string name="iniciar_sesi_n">Iniciar sesión</string>
+
+
 </resources>

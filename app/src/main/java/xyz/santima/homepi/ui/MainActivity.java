@@ -59,24 +59,67 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerView.setAdapter(new FirebaseRecyclerAdapter<Service, ServiceHolder>(Service.class, R.layout.sensor_card, ServiceHolder.class, ref) {
             @Override
             protected void populateViewHolder(ServiceHolder viewHolder, final Service model, final int position) {
-                viewHolder.setStatus(model.getStatus() + " " + (model.getType().equals("temperature") ? "º" : "%") );
-                viewHolder.setDate(model.getFormatDate());
-                viewHolder.setPlace(model.getPlace());
 
-                final DatabaseReference ref = this.getRef(position);
+                switch (model.getType()){
+                    case "garage":
+                        String status = "";
+                        String target = "";
+                        boolean enabled = true;
+                        switch (model.getStatus()){
+                            case "0":
+                                status = "Abierta";
+                                target = "Cerrar";
+                                enabled = true;
+                                break;
+                            case "1":
+                                status = "Cerrada";
+                                target = "Abrir";
+                                enabled = true;
+                                break;
+                            case "2":
+                                status = "Abriendo";
+                                target = status;
+                                enabled = false;
+                                break;
+                            case "3":
+                                status = "Cerrando";
+                                target = status;
+                                enabled = false;
+                                break;
+                        }
+                        viewHolder.setStatus(status);
+                        viewHolder.getCardButton().setText(target);
+                        viewHolder.getCardButton().setEnabled(enabled);
+                        setupCard(viewHolder, model, this.getRef(position));
+                        break;
+                    case "temperature":
+                        viewHolder.setStatus(model.getStatus() + "º");
+                        setupCard(viewHolder, model, this.getRef(position));
+                        break;
+                    default:
+                        viewHolder.setStatus(model.getStatus() + "%");
+                        setupCard(viewHolder, model, this.getRef(position));
+                        break;
 
-                viewHolder.getCardButton().setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        model.setUser("home-pi-android");
-                        model.setWorking(true);
-
-                        ref.setValue(model);
-                    }
-                });
+                }
 
             }
 
+        });
+    }
+
+    private void setupCard(ServiceHolder viewHolder, final Service model, final DatabaseReference ref) {
+        viewHolder.setDate(model.getFormatDate());
+        viewHolder.setPlace(model.getPlace());
+
+        viewHolder.getCardButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                model.setUser("home-pi-android");
+                model.setWorking(true);
+
+                ref.setValue(model);
+            }
         });
     }
 

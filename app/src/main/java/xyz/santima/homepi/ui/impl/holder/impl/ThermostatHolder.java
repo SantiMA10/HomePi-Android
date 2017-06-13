@@ -48,7 +48,7 @@ public class ThermostatHolder extends AbstractBasicHolder {
     public void __populate(Service service) {
         setDate(service.getFormatDate());
         setPlace(service.getPlace());
-        
+
         card_status.setText(service.getStatus() + "º");
 
         if(service.isWorking()){
@@ -70,6 +70,7 @@ public class ThermostatHolder extends AbstractBasicHolder {
 
     @OnClick(R.id.card_update_button)
     public void changeWorking(View view){
+        service.setUser("home-pi-android");
         service.setWorking(!service.isWorking());
         ref.setValue(service);
     }

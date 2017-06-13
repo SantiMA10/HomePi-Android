@@ -1,11 +1,7 @@
 package xyz.santima.homepi.model;
 
-import android.util.Log;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Objects;
 import java.util.TimeZone;
 
 /**
@@ -14,16 +10,21 @@ import java.util.TimeZone;
 
 public class Service {
 
+    public static final int GARAGE = 0;
+    public static final int SENSOR_TEMPERATURE = 1;
+    public static final int SENSOR_HUMIDITY = 2;
+    public static final int LIGHT = 3;
+
     private String date;
     private String status;
-    private String type;
+    private int type;
     private String place;
     private String user;
     private boolean working;
 
     public Service() {}
 
-    public Service(String date, String status, String type, String user, boolean working, String place) {
+    public Service(String date, String status, int type, String user, boolean working, String place) {
         this.date = date;
         this.status = status;
         this.type = type;
@@ -70,11 +71,11 @@ public class Service {
         this.place = place;
     }
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
 

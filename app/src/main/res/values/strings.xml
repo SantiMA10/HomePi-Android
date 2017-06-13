@@ -53,6 +53,12 @@
     <string name="apagada">Apagada</string>
     <string name="encender">Encender</string>
     <string name="apagar">Apagar</string>
+    <string name="abierta">Abierta</string>
+    <string name="cerrar">Cerrar</string>
+    <string name="cerrada">Cerrada</string>
+    <string name="abrir">Abrir</string>
+    <string name="abriendo">Abriendo</string>
+    <string name="cerrando">Cerrando</string>
 
 
 </resources>

@@ -92,6 +92,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         viewHolder.getCardButton().setEnabled(enabled);
                         setupCard(viewHolder, model, this.getRef(position));
                         break;
+                    case "light":
+                        boolean encendida = Boolean.parseBoolean(model.getStatus());
+                        viewHolder.setStatus(encendida ? getString(R.string.encendida) : getString(R.string.apagada));
+                        viewHolder.getCardButton().setText(encendida ? getString(R.string.apagar) : getString(R.string.encender));
+                        viewHolder.getCardButton().setEnabled(true);
+                        setupCard(viewHolder, model, this.getRef(position));
+                        break;
                     case "temperature":
                         viewHolder.setStatus(model.getStatus() + "º");
                         viewHolder.getCardButton().setText(getString(R.string.actualizar));

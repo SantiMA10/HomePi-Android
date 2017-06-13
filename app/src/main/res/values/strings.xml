@@ -49,6 +49,10 @@
     <string name="confirm_recovery_body" translation_description="Alert dialog displayed after password recovery email is sent">Sigue las instrucciones enviadas a %1$s para recuperar la contraseña.</string>
     <string name="progress_dialog_sending" translation_description="Progress dialog while password recovery email is being sent">Enviando…</string>
     <string name="iniciar_sesi_n">Iniciar sesión</string>
+    <string name="encendida">Encendida</string>
+    <string name="apagada">Apagada</string>
+    <string name="encender">Encender</string>
+    <string name="apagar">Apagar</string>
 
 
 </resources>

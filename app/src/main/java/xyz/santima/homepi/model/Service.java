@@ -4,16 +4,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
-/**
- * Created by GiantsV3 on 12/06/2017.
- */
-
 public class Service {
 
     public static final int GARAGE = 0;
     public static final int SENSOR_TEMPERATURE = 1;
     public static final int SENSOR_HUMIDITY = 2;
     public static final int LIGHT = 3;
+    public static final int THERMOSTAT = 4;
 
     private String date;
     private String status;

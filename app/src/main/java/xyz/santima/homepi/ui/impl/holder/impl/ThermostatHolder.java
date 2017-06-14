@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
 import butterknife.BindView;
@@ -70,7 +71,7 @@ public class ThermostatHolder extends AbstractBasicHolder {
 
     @OnClick(R.id.card_update_button)
     public void changeWorking(View view){
-        service.setUser("home-pi-android");
+        service.setUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
         service.setWorking(!service.isWorking());
         ref.setValue(service);
     }

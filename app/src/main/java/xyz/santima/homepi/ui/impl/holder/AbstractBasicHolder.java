@@ -1,6 +1,7 @@
 package xyz.santima.homepi.ui.impl.holder;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +22,8 @@ public abstract class AbstractBasicHolder extends RecyclerView.ViewHolder implem
     public abstract void setDate(String date);
     public abstract void setPlace(String place);
     public abstract Button getCardButton();
+    public abstract CardView getCard();
+    public abstract void showConfiguration(View v);
     public abstract void __populate(Service service);
 
     public void populate(Service service, DatabaseReference ref){
@@ -39,6 +42,13 @@ public abstract class AbstractBasicHolder extends RecyclerView.ViewHolder implem
                 model.setWorking(true);
 
                 ref.setValue(model);
+            }
+        });
+
+        getCard().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showConfiguration(v);
             }
         });
     }

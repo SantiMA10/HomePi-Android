@@ -1,5 +1,6 @@
 package xyz.santima.homepi.ui.impl.holder.impl;
 
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import xyz.santima.homepi.R;
 import xyz.santima.homepi.model.Service;
+import xyz.santima.homepi.ui.impl.component.CustomMaterialDialogBuilder;
 import xyz.santima.homepi.ui.impl.holder.AbstractBasicHolder;
 
 public class ThermostatHolder extends AbstractBasicHolder {
@@ -24,6 +26,7 @@ public class ThermostatHolder extends AbstractBasicHolder {
     @BindView(R.id.card_update_button) Button card_button;
     @BindView(R.id.card_button_plus) Button card_button_plus;
     @BindView(R.id.card_button_less) Button card_button_less;
+    @BindView(R.id.card) CardView card;
 
     DatabaseReference ref;
     Service service;
@@ -43,6 +46,19 @@ public class ThermostatHolder extends AbstractBasicHolder {
 
     public Button getCardButton(){
         return card_button;
+    }
+
+    @Override
+    public CardView getCard() {
+        return card;
+    }
+
+    @Override
+    public void showConfiguration(View v) {
+        new CustomMaterialDialogBuilder(v.getContext())
+                .title(R.string.firebase_configuration)
+                .positiveText(R.string.save)
+                .build().show();
     }
 
     @Override

@@ -7,10 +7,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceScreen;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
@@ -24,7 +20,7 @@ import java.util.List;
 import io.realm.Realm;
 import xyz.santima.homepi.R;
 import xyz.santima.homepi.model.FirebaseConfiguration;
-import xyz.santima.homepi.ui.impl.component.MultiInputMaterialDialogBuilder;
+import xyz.santima.homepi.ui.impl.component.CustomMaterialDialogBuilder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -96,13 +92,13 @@ public class ConfigurationFragment extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceClick(Preference preference) {
 
-                new MultiInputMaterialDialogBuilder(getContext())
+                new CustomMaterialDialogBuilder(getContext())
                         .addInput("","API Key")
                         .addInput("","Application Id")
                         .addInput("","Database URL")
                         .addInput("","GCM Sender Id")
                         .addInput("","Storage Bucket")
-                        .inputs(new MultiInputMaterialDialogBuilder.InputsCallback() {
+                        .inputs(new CustomMaterialDialogBuilder.CustomInputsCallback() {
                             @Override
                             public void onInputs(MaterialDialog dialog, List<CharSequence> inputs, boolean allInputsValidated) {
                                 FirebaseConfiguration configuration = new FirebaseConfiguration();

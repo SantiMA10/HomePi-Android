@@ -20,7 +20,7 @@ import butterknife.OnClick;
 import io.realm.Realm;
 import xyz.santima.homepi.R;
 import xyz.santima.homepi.model.FirebaseConfiguration;
-import xyz.santima.homepi.ui.impl.component.MultiInputMaterialDialogBuilder;
+import xyz.santima.homepi.ui.impl.component.CustomMaterialDialogBuilder;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -39,13 +39,13 @@ public class SplashActivity extends AppCompatActivity {
 
         if(configuration == null){
 
-            new MultiInputMaterialDialogBuilder(this)
+            new CustomMaterialDialogBuilder(this)
                     .addInput("","API Key")
                     .addInput("","Application Id")
                     .addInput("","Database URL")
                     .addInput("","GCM Sender Id")
                     .addInput("","Storage Bucket")
-                    .inputs(new MultiInputMaterialDialogBuilder.InputsCallback() {
+                    .inputs(new CustomMaterialDialogBuilder.CustomInputsCallback() {
                         @Override
                         public void onInputs(MaterialDialog dialog, List<CharSequence> inputs, boolean allInputsValidated) {
                             FirebaseConfiguration configuration = new FirebaseConfiguration();

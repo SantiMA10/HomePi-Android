@@ -1,5 +1,7 @@
 package xyz.santima.homepi.ui.impl.holder;
 
+import android.support.v7.widget.CardView;
+import android.view.View;
 import android.widget.Button;
 
 import com.google.firebase.database.DatabaseReference;
@@ -17,5 +19,7 @@ public interface BasicHolder {
     public Button getCardButton();
     public void __populate(Service service);
     public void populate(Service service, DatabaseReference ref);
+    public CardView getCard();
+    public void showConfiguration(View v);
 
 }

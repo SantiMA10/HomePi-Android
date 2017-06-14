@@ -17,9 +17,10 @@
 
         <ImageView
             android:id="@+id/garage_card_img"
-            android:layout_width="135dp"
-            android:layout_margin="5px"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight=".4"
+            android:layout_margin="5px"
             app:srcCompat="@drawable/garage_close" />
 
         <LinearLayout

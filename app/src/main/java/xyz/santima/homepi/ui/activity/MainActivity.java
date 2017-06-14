@@ -1,4 +1,4 @@
-package xyz.santima.homepi.ui;
+package xyz.santima.homepi.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,27 +8,21 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import xyz.santima.homepi.R;
-import xyz.santima.homepi.model.Service;
-import xyz.santima.homepi.ui.impl.adapter.OwnFirebaseRecyclerAdapter;
-import xyz.santima.homepi.ui.impl.holder.impl.SensorHolder;
+import xyz.santima.homepi.ui.fragment.ConfigurationFragment;
+import xyz.santima.homepi.ui.fragment.MainFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    @BindView(R.id.home_recycler_view) RecyclerView recyclerView;
     @BindView(R.id.nav_view) NavigationView navigationView;
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -39,18 +33,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
-
         initMenu();
-        initRecycleView();
-    }
-
-    private void initRecycleView() {
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/service");
-
-        recyclerView.setAdapter(new OwnFirebaseRecyclerAdapter(Service.class, R.layout.text_status_card, SensorHolder.class, ref));
     }
 
     private void initMenu() {
@@ -62,6 +45,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
+
+        this.getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.contenedor, MainFragment.newInstance())
+                .commit();
     }
 
     @Override
@@ -77,6 +65,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
+        android.support.v4.app.FragmentTransaction transaction = null;
+
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -90,6 +81,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             });
         }
+        else if(id == R.id.nav_main){
+            transaction = this.getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.contenedor, MainFragment.newInstance());
+        }
+        else if(id == R.id.nav_configuration){
+            transaction = this.getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.contenedor, ConfigurationFragment.newInstance());
+        }
+
+        transaction.addToBackStack(null).commit();
 
         drawer.closeDrawer(GravityCompat.START);
         return true;

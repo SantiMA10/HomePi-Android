@@ -3,9 +3,19 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_main"
+            android:icon="@android:drawable/ic_menu_close_clear_cancel"
+            android:title="@string/nav_main" />
+    </group>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_configuration"
+            android:icon="@android:drawable/ic_menu_close_clear_cancel"
+            android:title="@string/nav_configuration" />
+        <item
             android:id="@+id/nav_logout"
             android:icon="@android:drawable/ic_menu_close_clear_cancel"
-            android:title="Cerrar sesión" />
+            android:title="@string/nav_logout" />
     </group>
 
 </menu>

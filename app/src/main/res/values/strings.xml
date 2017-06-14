@@ -31,11 +31,11 @@
     <string name="welcome_back_idp_header" translation_description="Inline subtitle to users whose signup was interrupted since an existing account was detected">Existe una cuenta con ese email</string>
     <string name="welcome_back_email_header" translation_description="Message for returning users">Welcome back!</string>
     <string name="welcome_back_idp_prompt" translation_description="Message to users that need to signin using existing IDP accounts">
-        Existe una cuenta con <xliff:g id="email_addr" example="jane.doe@example.com" translation_description="">%1$s</xliff:g>.
-        Inicia sesión con <xliff:g id="provider_name" example="Google" translation_description="">%2$s</xliff:g> para continuar.
+        Existe una cuenta con <xliff:g example="jane.doe@example.com" id="email_addr" translation_description="">%1$s</xliff:g>.
+        Inicia sesión con <xliff:g example="Google" id="provider_name" translation_description="">%2$s</xliff:g> para continuar.
     </string>
     <string name="welcome_back_password_prompt_body" translation_description="Message to users that need to signin using existing email accounts">
-        Ya has usado <xliff:g id="email_addr" example="jane.doe@example.com" translation_description="">%1$s</xliff:g>
+        Ya has usado <xliff:g example="jane.doe@example.com" id="email_addr" translation_description="">%1$s</xliff:g>
         para iniciar sesión. Introduce tu contraseña para iniciar sesión.
     </string>
     <string name="progress_dialog_signing_in" translation_description="Progress dialog text">Iniciando sesión…</string>
@@ -59,6 +59,14 @@
     <string name="abrir">Abrir</string>
     <string name="abriendo">Abriendo</string>
     <string name="cerrando">Cerrando</string>
+    <string name="firebase_configuration">Configuración de Firebase</string>
+    <string name="save">Guardar</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="nav_main">Lista</string>
+    <string name="nav_logout">Cerrar sesión</string>
+    <string name="nav_configuration">Configuración</string>
 
 
 </resources>

@@ -10,7 +10,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import xyz.santima.homepi.R;
-import xyz.santima.homepi.ui.MainActivity;
+import xyz.santima.homepi.ui.activity.MainActivity;
 
 public class OwnFirebaseMessagingService extends FirebaseMessagingService {
 

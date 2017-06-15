@@ -64,7 +64,7 @@ public class ThermostatHolder extends AbstractBasicHolder {
     @Override
     public void __populate(Service service) {
         setDate(service.getFormatDate());
-        setPlace(service.getPlace());
+        setPlace(service.getRoom());
 
         card_status.setText(service.getStatus() + "º");
 

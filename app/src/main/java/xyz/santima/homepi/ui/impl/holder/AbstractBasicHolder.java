@@ -33,7 +33,7 @@ public abstract class AbstractBasicHolder extends RecyclerView.ViewHolder implem
 
     private void setupCard(final Service model, final DatabaseReference ref) {
         setDate(model.getFormatDate());
-        setPlace(model.getPlace());
+        setPlace(model.getRoom());
 
         getCardButton().setOnClickListener(new View.OnClickListener() {
             @Override

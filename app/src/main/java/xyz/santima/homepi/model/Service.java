@@ -15,19 +15,19 @@ public class Service {
     private String date;
     private String status;
     private int type;
-    private String place;
+    private String room;
     private String user;
     private boolean working;
 
     public Service() {}
 
-    public Service(String date, String status, int type, String user, boolean working, String place) {
+    public Service(String date, String status, int type, String user, boolean working, String room) {
         this.date = date;
         this.status = status;
         this.type = type;
         this.user = user;
         this.working = working;
-        this.place = place;
+        this.room = room;
     }
 
     public String getDate() {
@@ -60,12 +60,12 @@ public class Service {
         this.status = status.toString();
     }
 
-    public String getPlace() {
-        return place;
+    public String getRoom() {
+        return room;
     }
 
-    public void setPlace(String place) {
-        this.place = place;
+    public void setRoom(String room) {
+        this.room = room;
     }
 
     public int getType() {

@@ -57,7 +57,6 @@ public class SensorHolder extends AbstractBasicHolder {
         new CustomMaterialDialogBuilder(v.getContext())
                 .addCheckbox("Autorefrsco")
                 .addInput("", "Tiempo para autofresco")
-                .addCheckbox("Notificaciones")
                 .all(new CustomMaterialDialogBuilder.CustomAllCallback() {
                     @Override
                     public void onAll(MaterialDialog dialog, List<Boolean> checkboxes, List<CharSequence> inputs, boolean allInputsValidated) {

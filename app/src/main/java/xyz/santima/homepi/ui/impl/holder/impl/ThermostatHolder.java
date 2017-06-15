@@ -7,8 +7,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,11 +59,47 @@ public class ThermostatHolder extends AbstractBasicHolder {
     }
 
     @Override
+    @OnClick(R.id.card)
     public void showConfiguration(View v) {
+        boolean contains = false;
+        Map<String, Object> config = service.getConfig();
+        if(config.containsKey("notification")){
+            contains = ((List<String>)config.get("notification"))
+                    .contains(FirebaseInstanceId.getInstance().getToken());
+        }
+
         new CustomMaterialDialogBuilder(v.getContext())
-                .title(R.string.firebase_configuration)
+                .addCheckbox("Notificaciones", contains)
+                .checboxes(new CustomMaterialDialogBuilder.CustomCheckboxesCallback() {
+                    @Override
+                    public void onCheckBoxes(MaterialDialog dialog, List<Boolean> checkboxes) {
+                        Map<String, Object> config = service.getConfig();
+                        if(checkboxes.get(0)){
+                            if(config.containsKey("notification")){
+                                List<String> notification = ((List<String>)config.get("notification"));
+                                if(!notification.contains(FirebaseInstanceId.getInstance().getToken())){
+                                    notification.add(FirebaseInstanceId.getInstance().getToken());
+                                }
+                            }
+                            else{
+                                List<String> notification = new ArrayList<>();
+                                notification.add(FirebaseInstanceId.getInstance().getToken());
+                                config.put("notification", notification);
+                            }
+                        }
+                        else{
+                            if(config.containsKey("notification")){
+                                ((List<String>)config.get("notification"))
+                                        .remove(FirebaseInstanceId.getInstance().getToken());
+                            }
+                        }
+                        service.setConfig(config);
+                        ref.setValue(service);
+                    }
+                })
+                .title("Configuración")
                 .positiveText(R.string.save)
-                .build().show();
+                .show();
     }
 
     @Override
@@ -87,7 +128,7 @@ public class ThermostatHolder extends AbstractBasicHolder {
 
     @OnClick(R.id.card_update_button)
     public void changeWorking(View view){
-        service.setUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        service.setUser(FirebaseInstanceId.getInstance().getToken());
         service.setWorking(!service.isWorking());
         ref.setValue(service);
     }

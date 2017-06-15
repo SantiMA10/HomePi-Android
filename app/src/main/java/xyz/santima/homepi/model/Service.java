@@ -2,6 +2,8 @@ package xyz.santima.homepi.model;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TimeZone;
 
 public class Service {
@@ -19,7 +21,11 @@ public class Service {
     private String user;
     private boolean working;
 
-    public Service() {}
+    private Map<String, Object> config;
+
+    public Service() {
+        config = new HashMap<>();
+    }
 
     public Service(String date, String status, int type, String user, boolean working, String room) {
         this.date = date;
@@ -90,5 +96,13 @@ public class Service {
 
     public void setWorking(boolean working) {
         this.working = working;
+    }
+
+    public Map<String, Object> getConfig() {
+        return config;
+    }
+
+    public void setConfig(Map<String, Object> config) {
+        this.config = config;
     }
 }

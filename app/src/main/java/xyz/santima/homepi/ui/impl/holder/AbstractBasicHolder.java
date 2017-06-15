@@ -6,14 +6,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import xyz.santima.homepi.model.Service;
 
 public abstract class AbstractBasicHolder extends RecyclerView.ViewHolder implements BasicHolder  {
 
     protected Context context;
+    protected DatabaseReference ref;
+    protected Service service;
 
     public AbstractBasicHolder(View itemView) {
         super(itemView);
@@ -32,13 +34,15 @@ public abstract class AbstractBasicHolder extends RecyclerView.ViewHolder implem
     }
 
     private void setupCard(final Service model, final DatabaseReference ref) {
+        this.service = model;
+        this.ref = ref;
         setDate(model.getFormatDate());
         setPlace(model.getRoom());
 
         getCardButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                model.setUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                model.setUser(FirebaseInstanceId.getInstance().getToken());
                 model.setWorking(true);
 
                 ref.setValue(model);

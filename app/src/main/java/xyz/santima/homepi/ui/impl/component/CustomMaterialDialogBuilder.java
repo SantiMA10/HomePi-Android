@@ -35,8 +35,13 @@ public class CustomMaterialDialogBuilder extends MaterialDialog.Builder {
     }
 
     public CustomMaterialDialogBuilder addCheckbox(CharSequence title){
+        return addCheckbox(title, false);
+    }
+
+    public CustomMaterialDialogBuilder addCheckbox(CharSequence title, boolean checked){
         CheckBox newCheckBox = new CheckBox(mContext);
         newCheckBox.setText(title);
+        newCheckBox.setChecked(checked);
 
         mCheckboxes.add(newCheckBox);
         mRootView.addView(newCheckBox);

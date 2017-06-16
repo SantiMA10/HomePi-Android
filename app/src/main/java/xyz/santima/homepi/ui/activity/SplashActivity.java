@@ -1,9 +1,13 @@
 package xyz.santima.homepi.ui.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.firebase.ui.auth.AuthUI;
@@ -15,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
@@ -27,6 +32,9 @@ public class SplashActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 123;
     private static boolean firebase = false;
 
+    @BindView(R.id.login) Button login;
+    Realm realm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,40 +42,14 @@ public class SplashActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Realm.init(this);
-        final Realm realm = Realm.getDefaultInstance();
+        realm = Realm.getDefaultInstance();
         FirebaseConfiguration configuration = realm.where(FirebaseConfiguration.class).findFirst();
 
         if(configuration == null){
-
-            new CustomMaterialDialogBuilder(this)
-                    .addInput("","API Key")
-                    .addInput("","Application Id")
-                    .addInput("","Database URL")
-                    .addInput("","GCM Sender Id")
-                    .addInput("","Storage Bucket")
-                    .inputs(new CustomMaterialDialogBuilder.CustomInputsCallback() {
-                        @Override
-                        public void onInputs(MaterialDialog dialog, List<CharSequence> inputs, boolean allInputsValidated) {
-                            FirebaseConfiguration configuration = new FirebaseConfiguration();
-                            configuration.setApiKey(inputs.get(0)+"");
-                            configuration.setApplicationId(inputs.get(1)+"");
-                            configuration.setDatabaseUrl(inputs.get(2)+"");
-                            configuration.setGcmSenderId(inputs.get(3)+"");
-                            configuration.setStorageBucket(inputs.get(4)+"");
-
-                            realm.beginTransaction();
-                            realm.copyToRealmOrUpdate(configuration);
-                            realm.commitTransaction();
-                            configurateFirebase(configuration, getApplicationContext());
-                            realm.close();
-                        }
-                    })
-                    .title(R.string.firebase_configuration)
-                    .positiveText(R.string.save)
-                    .build().show();
-
+            login.setEnabled(false);
         }
         else{
+            login.setEnabled(true);
             configurateFirebase(configuration, getApplicationContext());
             realm.close();
         }
@@ -90,19 +72,46 @@ public class SplashActivity extends AppCompatActivity {
         auth();
     }
 
+    @OnClick(R.id.firebase_config)
+    protected void showFirebaseConfiguration(){
+
+        new CustomMaterialDialogBuilder(this)
+                .addInput("","API Key")
+                .addInput("","Application Id")
+                .addInput("","Database URL")
+                .addInput("","GCM Sender Id")
+                .addInput("","Storage Bucket")
+                .inputs(new CustomMaterialDialogBuilder.CustomInputsCallback() {
+                    @Override
+                    public void onInputs(MaterialDialog dialog, List<CharSequence> inputs, boolean allInputsValidated) {
+                        FirebaseConfiguration configuration = new FirebaseConfiguration();
+                        configuration.setApiKey(inputs.get(0)+"");
+                        configuration.setApplicationId(inputs.get(1)+"");
+                        configuration.setDatabaseUrl(inputs.get(2)+"");
+                        configuration.setGcmSenderId(inputs.get(3)+"");
+                        configuration.setStorageBucket(inputs.get(4)+"");
+
+                        if(!configuration.isCorrect()){
+                            Snackbar.make(findViewById(android.R.id.content), R.string.all_fields_message, Snackbar.LENGTH_LONG).show();
+                        }
+                        else{
+                            realm.beginTransaction();
+                            realm.copyToRealmOrUpdate(configuration);
+                            realm.commitTransaction();
+                            configurateFirebase(configuration, getApplicationContext());
+                            realm.close();
+                        }
+
+                    }
+                })
+                .title(R.string.firebase_configuration)
+                .positiveText(R.string.save)
+                .build().show();
+    }
+
     private void auth(){
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        if (auth.getCurrentUser() == null) {
-            startActivityForResult(
-                AuthUI.getInstance()
-                      .createSignInIntentBuilder()
-                      .setLogo(R.mipmap.ic_launcher)
-                      .setTheme(R.style.AuthThme)
-                      .setAllowNewEmailAccounts(false)
-                      .build(),
-                      RC_SIGN_IN);
-        }
-        else{
+        if (auth.getCurrentUser() != null) {
             startActivity(new Intent(SplashActivity.this, MainActivity.class));
             finish();
         }
@@ -118,7 +127,7 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick(R.id.iniciar_sesion)
+    @OnClick(R.id.login)
     public void login(){
         startActivityForResult(
                 AuthUI.getInstance()

@@ -116,10 +116,10 @@ public class ConfigurationFragment extends PreferenceFragmentCompat {
                                     realm.commitTransaction();
                                     realm.close();
 
-                                    Snackbar.make(getView(), "Para que los cambios tengan efecto es necesario reiniciar la aplicación.", Snackbar.LENGTH_LONG).show();
+                                    Snackbar.make(getView(), R.string.restart_message, Snackbar.LENGTH_LONG).show();
                                 }
                                 else{
-                                    Snackbar.make(getView(), "Todos los campos son obligatiros, no se han guardado los cambios.", Snackbar.LENGTH_LONG).show();
+                                    Snackbar.make(getView(), R.string.all_fields_message, Snackbar.LENGTH_LONG).show();
                                 }
 
                             }

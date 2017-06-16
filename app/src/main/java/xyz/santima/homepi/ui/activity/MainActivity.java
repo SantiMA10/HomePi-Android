@@ -92,7 +92,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .replace(R.id.contenedor, ConfigurationFragment.newInstance());
         }
 
-        transaction.addToBackStack(null).commit();
+        if(transaction != null){
+            transaction.addToBackStack(null).commit();
+        }
 
         drawer.closeDrawer(GravityCompat.START);
         return true;

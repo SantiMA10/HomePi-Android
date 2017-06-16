@@ -92,12 +92,15 @@ public class ConfigurationFragment extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceClick(Preference preference) {
 
+                FirebaseConfiguration configuration = Realm.getDefaultInstance()
+                        .where(FirebaseConfiguration.class).findFirst();
+
                 new CustomMaterialDialogBuilder(getContext())
-                        .addInput("","API Key")
-                        .addInput("","Application Id")
-                        .addInput("","Database URL")
-                        .addInput("","GCM Sender Id")
-                        .addInput("","Storage Bucket")
+                        .addInput(configuration.getApiKey(),"API Key")
+                        .addInput(configuration.getApplicationId(),"Application Id")
+                        .addInput(configuration.getDatabaseUrl(),"Database URL")
+                        .addInput(configuration.getGcmSenderId(),"GCM Sender Id")
+                        .addInput(configuration.getStorageBucket(),"Storage Bucket")
                         .inputs(new CustomMaterialDialogBuilder.CustomInputsCallback() {
                             @Override
                             public void onInputs(MaterialDialog dialog, List<CharSequence> inputs, boolean allInputsValidated) {

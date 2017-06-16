@@ -12,6 +12,7 @@ public class FirebaseConfiguration extends RealmObject {
     private String gcmSenderId;
     private String storageBucket;
 
+
     public FirebaseConfiguration() {
         this.apiKey = "";
         this.applicationId = "";

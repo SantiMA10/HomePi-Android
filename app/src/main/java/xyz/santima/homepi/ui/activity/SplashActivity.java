@@ -16,6 +16,7 @@ import com.firebase.ui.auth.ResultCodes;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -66,6 +67,9 @@ public class SplashActivity extends AppCompatActivity {
                     .setGcmSenderId(configuration.getGcmSenderId())
                     .setStorageBucket(configuration.getStorageBucket())
                     .build());
+
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
             firebase = true;
         }
 

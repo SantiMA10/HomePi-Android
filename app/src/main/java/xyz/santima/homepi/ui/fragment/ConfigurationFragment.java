@@ -92,15 +92,15 @@ public class ConfigurationFragment extends PreferenceFragmentCompat {
             @Override
             public boolean onPreferenceClick(Preference preference) {
 
-                FirebaseConfiguration configuration = Realm.getDefaultInstance()
+                FirebaseConfiguration initialConfiguration = Realm.getDefaultInstance()
                         .where(FirebaseConfiguration.class).findFirst();
 
                 new CustomMaterialDialogBuilder(getContext())
-                        .addInput(configuration.getApiKey(),"API Key")
-                        .addInput(configuration.getApplicationId(),"Application Id")
-                        .addInput(configuration.getDatabaseUrl(),"Database URL")
-                        .addInput(configuration.getGcmSenderId(),"GCM Sender Id")
-                        .addInput(configuration.getStorageBucket(),"Storage Bucket")
+                        .addInput(initialConfiguration.getApiKey(),"API Key")
+                        .addInput(initialConfiguration.getApplicationId(),"Application Id")
+                        .addInput(initialConfiguration.getDatabaseUrl(),"Database URL")
+                        .addInput(initialConfiguration.getGcmSenderId(),"GCM Sender Id")
+                        .addInput(initialConfiguration.getStorageBucket(),"Storage Bucket")
                         .inputs(new CustomMaterialDialogBuilder.CustomInputsCallback() {
                             @Override
                             public void onInputs(MaterialDialog dialog, List<CharSequence> inputs, boolean allInputsValidated) {
@@ -111,7 +111,10 @@ public class ConfigurationFragment extends PreferenceFragmentCompat {
                                 configuration.setGcmSenderId(inputs.get(3)+"");
                                 configuration.setStorageBucket(inputs.get(4)+"");
 
-                                if(configuration.isCorrect()){
+                                if(!configuration.isCorrect()){
+                                    Snackbar.make(getView(), R.string.all_fields_message, Snackbar.LENGTH_LONG).show();
+                                }
+                                else if(configuration.isCorrect()){
                                     Realm realm = Realm.getDefaultInstance();
                                     realm.beginTransaction();
                                     realm.deleteAll();
@@ -120,9 +123,6 @@ public class ConfigurationFragment extends PreferenceFragmentCompat {
                                     realm.close();
 
                                     Snackbar.make(getView(), R.string.restart_message, Snackbar.LENGTH_LONG).show();
-                                }
-                                else{
-                                    Snackbar.make(getView(), R.string.all_fields_message, Snackbar.LENGTH_LONG).show();
                                 }
 
                             }

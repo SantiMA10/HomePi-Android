@@ -45,7 +45,7 @@ public class AccessoryConfigurationActivity extends AppCompatActivity {
     JSONObject config;
     MaterialDialog dialog;
 
-    boolean unsaved = true;
+    boolean unsaved = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -83,6 +83,7 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
     }
 
     private void initThermostatConfiguration() {
+        initSwitchConfiguration();
     }
 
     private void initTemperatureConfiguration() {
@@ -333,7 +334,7 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
             }
         });
     }
-
+    
     private void initCommonConfiguration(){
 
         PreferenceScreen dialog = (PreferenceScreen) getPreferenceManager().findPreference("name");

@@ -16,9 +16,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import xyz.santima.homepi.R;
+import xyz.santima.homepi.business.factory.ConfigFactory;
 import xyz.santima.homepi.model.Service;
+import xyz.santima.homepi.model.config.AbstractConfig;
+import xyz.santima.homepi.model.config.Config;
 import xyz.santima.homepi.ui.activity.AccessoryConfigurationActivity;
 import xyz.santima.homepi.ui.impl.component.CustomMaterialDialogBuilder;
 
@@ -93,19 +98,19 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
     }
 
     private void initThermostatConfiguration() {
-        initSwitchConfiguration();
+        initConfigSelectorDialogs("actuator", ConfigFactory.getActuatorConfigs(), AbstractConfig.MODE_OBJECT, "actuatorConfig", "actuatorType");
     }
 
     private void initTemperatureConfiguration() {
-        initSensorConfiguration();
+        initConfigSelectorDialogs("sensor", ConfigFactory.getSensorConfigs(), AbstractConfig.MODE_OBJECT, "sensorConfig", "sensorType");
     }
 
     private void initHumidityConfiguration() {
-        initSensorConfiguration();
+        initConfigSelectorDialogs("sensor", ConfigFactory.getSensorConfigs(), AbstractConfig.MODE_OBJECT, "sensorConfig", "sensorType");
     }
 
     private void initLightConfiguration() {
-        initSwitchConfiguration();
+        initConfigSelectorDialogs("actuator", ConfigFactory.getActuatorConfigs(), AbstractConfig.MODE_OBJECT, "actuatorConfig", "actuatorType");
         PreferenceScreen dialog = (PreferenceScreen) getPreferenceManager().findPreference("status");
         dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -136,7 +141,7 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
     }
 
     private void initGarageConfiguration() {
-        initSwitchConfiguration();
+        initConfigSelectorDialogs("actuator", ConfigFactory.getActuatorConfigs(), AbstractConfig.MODE_OBJECT, "actuatorConfig", "actuatorType");
         PreferenceScreen dialog = (PreferenceScreen) getPreferenceManager().findPreference("status");
         dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -166,183 +171,66 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
         });
     }
 
-    private void initSwitchConfiguration(){
+    private void initConfigSelectorDialogs(String preference, final Config[] configs, final int mode, final String paramConfig, final String paramType){
 
-        PreferenceScreen dialog = (PreferenceScreen) getPreferenceManager().findPreference("actuator");
+        PreferenceScreen dialog = (PreferenceScreen) getPreferenceManager().findPreference(preference);
         dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 new MaterialDialog.Builder(getActivity())
                         .title(R.string.status)
-                        .items(new String[]{"Rest"})
+                        .items(ConfigFactory.getConfigsNames(configs))
                         .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                             @Override
                             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
-                                try {
-                                    config.put("actuatorType", dialog.getItems().indexOf(text));
-                                    activity.setConfig(config);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                                initConfigSelectorDialogs(configs[dialog.getItems().indexOf(text)], mode, paramConfig, paramType);
 
                                 return true;
                             }
                         })
-                        .positiveText(R.string.create)
+                        .positiveText(R.string.choose)
                         .show();
 
                 return false;
             }
         });
 
-        dialog = (PreferenceScreen) getPreferenceManager().findPreference("actuator_config");
-        dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-
-                JSONObject actuatorConfig = new JSONObject();
-                JSONObject paths = new JSONObject();
-
-                try {
-                    actuatorConfig = config.getJSONObject("actuatorConfig");
-                    if(actuatorConfig != null){
-                        paths = actuatorConfig.optJSONObject("paths");
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                final JSONObject finalActuatorConfig = actuatorConfig;
-                final JSONObject finalPaths = paths;
-                new CustomMaterialDialogBuilder(getContext())
-                        .addInput(actuatorConfig.optString("url", ""),"URL")
-                        .addInput(paths.optString("on", ""),"Path para on")
-                        .addInput(paths.optString("off", ""),"Path para off")
-                        .addInput(actuatorConfig.optString("blinkTime", "0"),"Tiempo de parpadeo")
-                        .inputs(new CustomMaterialDialogBuilder.CustomInputsCallback() {
-                            @Override
-                            public void onInputs(MaterialDialog dialog, List<CharSequence> inputs, boolean allInputsValidated) {
-                                String url = inputs.get(0)+"";
-                                String on = inputs.get(1)+"";
-                                String off = inputs.get(2)+"";
-                                String blink = inputs.get(3)+"";
-
-                                if(url.isEmpty() || on.isEmpty() || off.isEmpty() || blink.isEmpty()){
-                                    Snackbar.make(getView(), R.string.not_empty, Snackbar.LENGTH_LONG).show();
-                                }
-                                else{
-                                    try {
-                                        finalActuatorConfig.put("url", url);
-                                        finalActuatorConfig.put("blinkTime", Integer.parseInt(blink));
-                                        finalPaths.put("on", on);
-                                        finalPaths.put("off", off);
-                                        finalActuatorConfig.put("paths", finalPaths);
-                                        config.put("actuatorConfig", finalActuatorConfig);
-                                        activity.setConfig(config);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-
-                                }
-
-                            }
-                        })
-                        .title(R.string.firebase_configuration)
-                        .positiveText(R.string.save)
-                        .build().show();
-
-                return false;
-            }
-        });
     }
 
-    private void initSensorConfiguration(){
+    private void initConfigSelectorDialogs(final Config config, final int mode, final String paramConfig, final String paramType){
 
-        PreferenceScreen dialog = (PreferenceScreen) getPreferenceManager().findPreference("sensor");
-        dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        CustomMaterialDialogBuilder builder =  new CustomMaterialDialogBuilder(getContext());
+        Map<String, String> inputs = config.getInputs(this.config.optJSONObject(paramConfig));
+        Set<String> keys = inputs.keySet();
+
+        final JSONObject object = this.config.optInt(paramType, -1) == config.getType() ? this.config : new JSONObject();
+
+        for(String key : keys){
+            builder.addInput(inputs.get(key), key);
+        }
+
+        builder.inputs(new CustomMaterialDialogBuilder.CustomInputsCallback() {
             @Override
-            public boolean onPreferenceClick(Preference preference) {
-                new MaterialDialog.Builder(getActivity())
-                        .title(R.string.status)
-                        .items(new String[]{"Rest"})
-                        .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
-                                try {
-                                    config.put("sensorType", dialog.getItems().indexOf(text));
-                                    activity.setConfig(config);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-
-                                return true;
-                            }
-                        })
-                        .positiveText(R.string.create)
-                        .show();
-
-                return false;
-            }
-        });
-
-        dialog = (PreferenceScreen) getPreferenceManager().findPreference("sensor_config");
-        dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-
-                JSONObject sensorConfig = new JSONObject();
-                JSONObject param = new JSONObject();
-
+            public void onInputs(MaterialDialog dialog, List<CharSequence> inputs, boolean allInputsValidated) {
                 try {
-                    sensorConfig  = config.getJSONObject("sensorConfig");
-                    if(sensorConfig  != null){
-                        param = sensorConfig .optJSONObject("param");
+                    JSONObject config_object = config.addConfig(mode, inputs, object, paramConfig);
+                    config_object.put(paramType, config.getType());
+                    if(config_object == null){
+                        Snackbar.make(getView(), R.string.not_empty, Snackbar.LENGTH_LONG).show();
                     }
+                    else{
+                        System.out.println(config_object);
+                        activity.setConfig(config_object);
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-                final JSONObject finalSensorConfig = sensorConfig ;
-                final JSONObject finalParam = param;
-                new CustomMaterialDialogBuilder(getContext())
-                        .addInput(sensorConfig.optString("url", ""),"URL")
-                        .addInput(param.optString("ok", ""),"Parametro para el ok")
-                        .addInput(param.optString("error", ""),"Parametro para el error")
-                        .inputs(new CustomMaterialDialogBuilder.CustomInputsCallback() {
-                            @Override
-                            public void onInputs(MaterialDialog dialog, List<CharSequence> inputs, boolean allInputsValidated) {
-                                String url = inputs.get(0)+"";
-                                String ok = inputs.get(1)+"";
-                                String error = inputs.get(2)+"";
-
-                                if(url.isEmpty() || ok.isEmpty() || error.isEmpty()){
-                                    Snackbar.make(getView(), R.string.not_empty, Snackbar.LENGTH_LONG).show();
-                                }
-                                else{
-                                    try {
-                                        finalSensorConfig.put("url", url);
-                                        finalParam.put("ok", ok);
-                                        finalParam.put("error", error);
-                                        finalSensorConfig.put("param", finalParam);
-                                        config.put("sensorConfig", finalSensorConfig);
-                                        activity.setConfig(config);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-
-                                }
-
-                            }
-                        })
-                        .title(R.string.firebase_configuration)
-                        .positiveText(R.string.save)
-                        .build().show();
-
-                return false;
             }
         });
+
+        builder.positiveText(R.string.save).title(getString(R.string.configure) + config.getName()).build().show();
+
     }
 
     private void initCommonConfiguration(){

@@ -167,6 +167,8 @@
     <string name="loading">Cargando...</string>
     <string name="status">Estado</string>
     <string name="not_empty">No se pueden dejar campos vacios</string>
+    <string name="choose">Elegir</string>
+    <string name="configure">Configurar</string>
 
 
 </resources>

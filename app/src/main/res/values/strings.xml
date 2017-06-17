@@ -164,6 +164,7 @@
     <string name="changes_not_saved">No se han guardado los cambios</string>
     <string name="changes_saved">Cambios guardados</string>
     <string name="dismiss">Descartar</string>
+    <string name="loading">Cargando...</string>
 
 
 </resources>

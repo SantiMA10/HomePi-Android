@@ -22,6 +22,7 @@ public class Service implements Serializable {
     private String user;
     private boolean working;
     private String key;
+    private String name;
 
     private Map<String, Object> config;
 
@@ -29,7 +30,7 @@ public class Service implements Serializable {
         config = new HashMap<>();
     }
 
-    public Service(String date, String status, int type, String user, boolean working, String room, String key) {
+    public Service(String date, String status, int type, String user, boolean working, String room, String key, String name) {
         this.date = date;
         this.status = status;
         this.type = type;
@@ -37,6 +38,15 @@ public class Service implements Serializable {
         this.working = working;
         this.room = room;
         this.key = key;
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDate() {

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.takisoft.fix.support.v7.preference.PreferenceCategory
+        android:title="Configuración"
+        android:key="configuration_category">
+
+        <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+            android:title="Nombre"
+            android:summary="Elige el nombre de este dispositivo"
+            android:key="name" >
+
+        </PreferenceScreen>
+        <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+            android:title="Habitación"
+            android:summary="Configura en que habitación se encuentra este dispositivo"
+            android:key="room" >
+
+        </PreferenceScreen>
+
+    </com.takisoft.fix.support.v7.preference.PreferenceCategory>
+
+
+</android.support.v7.preference.PreferenceScreen>

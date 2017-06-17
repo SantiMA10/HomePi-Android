@@ -62,7 +62,7 @@
     <string name="firebase_configuration">Configuración de Firebase</string>
     <string name="save">Guardar</string>
 
-    <string name="nav_main">Lista</string>
+    <string name="nav_main">Casa</string>
     <string name="nav_logout">Cerrar sesión</string>
     <string name="nav_configuration">Configuración</string>
     <string name="new_accessory">Nuevo accesorio</string>

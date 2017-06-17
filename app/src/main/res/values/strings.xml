@@ -161,6 +161,9 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+    <string name="changes_not_saved">No se han guardado los cambios</string>
+    <string name="changes_saved">Cambios guardados</string>
+    <string name="dismiss">Descartar</string>
 
 
 </resources>

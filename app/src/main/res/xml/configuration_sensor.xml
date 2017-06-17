@@ -15,7 +15,17 @@
             android:title="Habitación"
             android:summary="Configura en que habitación se encuentra este dispositivo"
             android:key="room" >
+        </PreferenceScreen>
+        <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+            android:title="Sensor"
+            android:summary="Elige el tipo de sensor que controla este dispositivo"
+            android:key="sensor" >
+        </PreferenceScreen>
 
+        <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+            android:title="Configuración del Sensor"
+            android:summary="Configura el sensor que controla este dispositivo"
+            android:key="sensor_config" >
         </PreferenceScreen>
 
     </com.takisoft.fix.support.v7.preference.PreferenceCategory>

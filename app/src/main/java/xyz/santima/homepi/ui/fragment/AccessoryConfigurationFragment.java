@@ -86,13 +86,15 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
     }
 
     private void initTemperatureConfiguration() {
+        initSensorConfiguration();
     }
 
     private void initHumidityConfiguration() {
+        initSensorConfiguration();
     }
 
     private void initLightConfiguration() {
-        initSwitchService();
+        initSwitchConfiguration();
         PreferenceScreen dialog = (PreferenceScreen) getPreferenceManager().findPreference("status");
         dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -123,7 +125,7 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
     }
 
     private void initGarageConfiguration() {
-        initSwitchService();
+        initSwitchConfiguration();
         PreferenceScreen dialog = (PreferenceScreen) getPreferenceManager().findPreference("status");
         dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -153,7 +155,7 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
         });
     }
 
-    private void initSwitchService(){
+    private void initSwitchConfiguration(){
 
         PreferenceScreen dialog = (PreferenceScreen) getPreferenceManager().findPreference("actuator");
         dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -226,6 +228,94 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
                                         finalPaths.put("off", off);
                                         finalActuatorConfig.put("paths", finalPaths);
                                         config.put("actuatorConfig", finalActuatorConfig);
+                                        activity.setConfig(config);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }
+
+                            }
+                        })
+                        .title(R.string.firebase_configuration)
+                        .positiveText(R.string.save)
+                        .build().show();
+
+                return false;
+            }
+        });
+    }
+
+    private void initSensorConfiguration(){
+
+        PreferenceScreen dialog = (PreferenceScreen) getPreferenceManager().findPreference("sensor");
+        dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new MaterialDialog.Builder(getActivity())
+                        .title(R.string.status)
+                        .items(new String[]{"Rest"})
+                        .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                                try {
+                                    config.put("sensorType", dialog.getItems().indexOf(text));
+                                    activity.setConfig(config);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                return true;
+                            }
+                        })
+                        .positiveText(R.string.create)
+                        .show();
+
+                return false;
+            }
+        });
+
+        dialog = (PreferenceScreen) getPreferenceManager().findPreference("sensor_config");
+        dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+
+                JSONObject sensorConfig = new JSONObject();
+                JSONObject param = new JSONObject();
+
+                try {
+                    sensorConfig  = config.getJSONObject("sensorConfig");
+                    if(sensorConfig  != null){
+                        param = sensorConfig .optJSONObject("param");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                final JSONObject finalSensorConfig = sensorConfig ;
+                final JSONObject finalParam = param;
+                new CustomMaterialDialogBuilder(getContext())
+                        .addInput(sensorConfig.optString("url", ""),"URL")
+                        .addInput(param.optString("ok", ""),"Parametro para el ok")
+                        .addInput(param.optString("error", ""),"Parametro para el error")
+                        .inputs(new CustomMaterialDialogBuilder.CustomInputsCallback() {
+                            @Override
+                            public void onInputs(MaterialDialog dialog, List<CharSequence> inputs, boolean allInputsValidated) {
+                                String url = inputs.get(0)+"";
+                                String ok = inputs.get(1)+"";
+                                String error = inputs.get(2)+"";
+
+                                if(url.isEmpty() || ok.isEmpty() || error.isEmpty()){
+                                    Snackbar.make(getView(), R.string.not_empty, Snackbar.LENGTH_LONG).show();
+                                }
+                                else{
+                                    try {
+                                        finalSensorConfig.put("url", url);
+                                        finalParam.put("ok", ok);
+                                        finalParam.put("error", error);
+                                        finalSensorConfig.put("param", finalParam);
+                                        config.put("sensorConfig", finalSensorConfig);
                                         activity.setConfig(config);
                                     } catch (JSONException e) {
                                         e.printStackTrace();

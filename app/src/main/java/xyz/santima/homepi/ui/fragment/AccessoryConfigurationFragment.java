@@ -403,6 +403,33 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
             }
         });
 
+        dialog = (PreferenceScreen) getPreferenceManager().findPreference("delete");
+        if(activity.isNew()){
+            dialog.setTitle("Salir");
+            dialog.setSummary("Salir y no crear este accesorio");
+            dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    activity.finish();
+
+                    return false;
+                }
+            });
+        }
+        else{
+            dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+
+                    activity.delete();
+
+                    return false;
+                }
+            });
+        }
+
+
+
     }
 
 }

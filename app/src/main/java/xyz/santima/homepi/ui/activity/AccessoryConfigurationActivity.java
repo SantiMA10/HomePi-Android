@@ -61,6 +61,7 @@ public class AccessoryConfigurationActivity extends AppCompatActivity {
         key = getIntent().getStringExtra(REF_KEY);
 
         if(service != null){
+            type = -1;
             setTitle(service.getName() + " - " + service.getRoom());
             dialog = new MaterialDialog.Builder(this)
                     .content(R.string.loading)
@@ -216,5 +217,16 @@ public class AccessoryConfigurationActivity extends AppCompatActivity {
 
     public void unsaved() {
         this.unsaved = true;
+    }
+
+    public boolean isNew() {
+        return type > -1;
+    }
+
+    public void delete() {
+        System.out.print("borrando...");
+        FirebaseDatabase.getInstance().getReference("services/"+service.getKey()).removeValue();
+        FirebaseDatabase.getInstance().getReference("service/"+service.getKey()).removeValue();
+        this.finish();
     }
 }

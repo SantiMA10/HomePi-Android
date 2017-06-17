@@ -3,9 +3,11 @@ package xyz.santima.homepi.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceScreen;
+import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
@@ -56,23 +58,190 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
         switch (accessoryType){
             case Service.GARAGE:
                 setPreferencesFromResource(R.xml.configuration_garage, rootKey);
+                initGarageConfiguration();
                 break;
             case Service.LIGHT:
                 setPreferencesFromResource(R.xml.configuration_light, rootKey);
+                initLightConfiguration();
                 break;
             case Service.SENSOR_HUMIDITY:
                 setPreferencesFromResource(R.xml.configuration_sensor, rootKey);
+                initHumidityConfiguration();
                 break;
             case Service.SENSOR_TEMPERATURE:
                 setPreferencesFromResource(R.xml.configuration_sensor, rootKey);
+                initTemperatureConfiguration();
                 break;
             case Service.THERMOSTAT:
                 setPreferencesFromResource(R.xml.configuration_thermostat, rootKey);
+                initThermostatConfiguration();
                 break;
         }
 
         initCommonConfiguration();
 
+    }
+
+    private void initThermostatConfiguration() {
+    }
+
+    private void initTemperatureConfiguration() {
+    }
+
+    private void initHumidityConfiguration() {
+    }
+
+    private void initLightConfiguration() {
+        initSwitchService();
+        PreferenceScreen dialog = (PreferenceScreen) getPreferenceManager().findPreference("status");
+        dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new MaterialDialog.Builder(getActivity())
+                        .title(R.string.status)
+                        .items(new String[]{"Encendida", "Apagada"})
+                        .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                                try {
+                                    config.put("status", dialog.getItems().indexOf(text));
+                                    activity.setConfig(config);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                return true;
+                            }
+                        })
+                        .positiveText(R.string.create)
+                        .show();
+
+                return false;
+            }
+        });
+    }
+
+    private void initGarageConfiguration() {
+        initSwitchService();
+        PreferenceScreen dialog = (PreferenceScreen) getPreferenceManager().findPreference("status");
+        dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new MaterialDialog.Builder(getActivity())
+                        .title(R.string.status)
+                        .items(new String[]{"Abierta", "Cerrada"})
+                        .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                                try {
+                                    config.put("status", dialog.getItems().indexOf(text));
+                                    activity.setConfig(config);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                return true;
+                            }
+                        })
+                        .positiveText(R.string.create)
+                        .show();
+
+                return false;
+            }
+        });
+    }
+
+    private void initSwitchService(){
+
+        PreferenceScreen dialog = (PreferenceScreen) getPreferenceManager().findPreference("actuator");
+        dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new MaterialDialog.Builder(getActivity())
+                        .title(R.string.status)
+                        .items(new String[]{"Rest"})
+                        .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                                try {
+                                    config.put("actuatorType", dialog.getItems().indexOf(text));
+                                    activity.setConfig(config);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                return true;
+                            }
+                        })
+                        .positiveText(R.string.create)
+                        .show();
+
+                return false;
+            }
+        });
+
+        dialog = (PreferenceScreen) getPreferenceManager().findPreference("actuator_config");
+        dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+
+                JSONObject actuatorConfig = new JSONObject();
+                JSONObject paths = new JSONObject();
+
+                try {
+                    actuatorConfig = config.getJSONObject("actuatorConfig");
+                    if(actuatorConfig != null){
+                        paths = actuatorConfig.optJSONObject("paths");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                final JSONObject finalActuatorConfig = actuatorConfig;
+                final JSONObject finalPaths = paths;
+                new CustomMaterialDialogBuilder(getContext())
+                        .addInput(actuatorConfig.optString("url", ""),"URL")
+                        .addInput(paths.optString("on", ""),"Path para on")
+                        .addInput(paths.optString("off", ""),"Path para off")
+                        .addInput(actuatorConfig.optString("blinkTime", "0"),"Tiempo de parpadeo")
+                        .inputs(new CustomMaterialDialogBuilder.CustomInputsCallback() {
+                            @Override
+                            public void onInputs(MaterialDialog dialog, List<CharSequence> inputs, boolean allInputsValidated) {
+                                String url = inputs.get(0)+"";
+                                String on = inputs.get(1)+"";
+                                String off = inputs.get(2)+"";
+                                String blink = inputs.get(3)+"";
+
+                                if(url.isEmpty() || on.isEmpty() || off.isEmpty() || blink.isEmpty()){
+                                    Snackbar.make(getView(), R.string.not_empty, Snackbar.LENGTH_LONG).show();
+                                }
+                                else{
+                                    try {
+                                        finalActuatorConfig.put("url", url);
+                                        finalActuatorConfig.put("blinkTime", Integer.parseInt(blink));
+                                        finalPaths.put("on", on);
+                                        finalPaths.put("off", off);
+                                        finalActuatorConfig.put("paths", finalPaths);
+                                        config.put("actuatorConfig", finalActuatorConfig);
+                                        activity.setConfig(config);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }
+
+                            }
+                        })
+                        .title(R.string.firebase_configuration)
+                        .positiveText(R.string.save)
+                        .build().show();
+
+                return false;
+            }
+        });
     }
 
     private void initCommonConfiguration(){

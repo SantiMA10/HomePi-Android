@@ -165,6 +165,8 @@
     <string name="changes_saved">Cambios guardados</string>
     <string name="dismiss">Descartar</string>
     <string name="loading">Cargando...</string>
+    <string name="status">Estado</string>
+    <string name="not_empty">No se pueden dejar campos vacios</string>
 
 
 </resources>

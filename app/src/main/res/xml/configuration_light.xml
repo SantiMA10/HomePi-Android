@@ -15,7 +15,22 @@
             android:title="Habitación"
             android:summary="Configura en que habitación se encuentra este dispositivo"
             android:key="room" >
+        </PreferenceScreen>
+        <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+            android:title="Estado"
+            android:summary="Configura el estado de este dispositov"
+            android:key="status" >
+        </PreferenceScreen>
+        <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+            android:title="Interruptor"
+            android:summary="Elige el tipo de interruptor que controla este dispositivo"
+            android:key="actuator" >
+        </PreferenceScreen>
 
+        <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+            android:title="Configuración del interruptor"
+            android:summary="Configura el interruptor que controla este dispositivo"
+            android:key="actuator_config" >
         </PreferenceScreen>
 
     </com.takisoft.fix.support.v7.preference.PreferenceCategory>

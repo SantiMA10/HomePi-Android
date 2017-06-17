@@ -1,12 +1,13 @@
 package xyz.santima.homepi.model;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
-public class Service {
+public class Service implements Serializable {
 
     public static final int GARAGE = 0;
     public static final int SENSOR_TEMPERATURE = 1;

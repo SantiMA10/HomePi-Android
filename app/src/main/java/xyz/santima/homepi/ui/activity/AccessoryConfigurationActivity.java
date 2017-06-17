@@ -35,6 +35,7 @@ import xyz.santima.homepi.ui.fragment.AccessoryConfigurationFragment;
 public class AccessoryConfigurationActivity extends AppCompatActivity {
 
     public static final String SERVICE_KEY = "service";
+    public static final String TYPE = "type";
     public static final String REF_KEY = "ref";
 
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -44,6 +45,7 @@ public class AccessoryConfigurationActivity extends AppCompatActivity {
     String key;
     JSONObject config;
     MaterialDialog dialog;
+    int type;
 
     boolean unsaved = false;
 
@@ -75,7 +77,7 @@ public class AccessoryConfigurationActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    initPreferences();
+                    initPreferences(service.getType());
                 }
 
                 @Override
@@ -87,34 +89,40 @@ public class AccessoryConfigurationActivity extends AppCompatActivity {
         else{
             setTitle("Nuevo");
             config = new JSONObject();
-            initPreferences();
+            type = getIntent().getIntExtra(TYPE, 0);
+            initPreferences(type);
         }
 
 
     }
 
-    private void initPreferences() {
+    private void initPreferences(int type) {
 
         //Setup fragment preference
         this.getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.contenedor, AccessoryConfigurationFragment.newInstance(service.getType()))
+                .replace(R.id.contenedor, AccessoryConfigurationFragment.newInstance(type))
                 .commit();
 
         //Setup fab
-        if(service.getType() != Service.GARAGE && service.getType() != Service.LIGHT
-                && service.getType() != Service.THERMOSTAT){
-            fab.setVisibility(View.INVISIBLE);
+        if(service != null){
+            if(service.getType() != Service.GARAGE && service.getType() != Service.LIGHT
+                    && service.getType() != Service.THERMOSTAT){
+                fab.setVisibility(View.INVISIBLE);
+            }
+            else{
+                boolean contains = false;
+                Map<String, Object> config = service.getConfig();
+                if(config.containsKey("notification")){
+                    contains = ((List<String>)config.get("notification"))
+                            .contains(FirebaseInstanceId.getInstance().getToken());
+                }
+                changeFABIcon(contains);
+
+            }
         }
         else{
-            boolean contains = false;
-            Map<String, Object> config = service.getConfig();
-            if(config.containsKey("notification")){
-                contains = ((List<String>)config.get("notification"))
-                        .contains(FirebaseInstanceId.getInstance().getToken());
-            }
-            changeFABIcon(contains);
-
+            fab.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -181,7 +189,19 @@ public class AccessoryConfigurationActivity extends AppCompatActivity {
     }
 
     public void save(){
-        FirebaseDatabase.getInstance().getReference("services/"+service.getKey()+"/config").setValue(new Gson().fromJson(config.toString(), new TypeToken<HashMap<String, Object>>() {}.getType()));
+        if(service != null){
+            FirebaseDatabase.getInstance().getReference("services/"+service.getKey()+"/config").setValue(new Gson().fromJson(config.toString(), new TypeToken<HashMap<String, Object>>() {}.getType()));
+        }
+        else{
+            JSONObject base = new JSONObject();
+            try {
+                base.put("config", config);
+                base.put("type", type);
+                FirebaseDatabase.getInstance().getReference("services").push().setValue(new Gson().fromJson(base.toString(), new TypeToken<HashMap<String, Object>>() {}.getType()));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
         unsaved = false;
     }
 

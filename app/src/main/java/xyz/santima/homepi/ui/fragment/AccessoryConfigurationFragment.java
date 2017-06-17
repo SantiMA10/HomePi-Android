@@ -66,11 +66,21 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
                 break;
             case Service.SENSOR_HUMIDITY:
                 setPreferencesFromResource(R.xml.configuration_sensor, rootKey);
+                try {
+                    config.put("sensorServiceType", accessoryType);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 initHumidityConfiguration();
                 break;
             case Service.SENSOR_TEMPERATURE:
                 setPreferencesFromResource(R.xml.configuration_sensor, rootKey);
                 initTemperatureConfiguration();
+                try {
+                    config.put("sensorServiceType", accessoryType);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
             case Service.THERMOSTAT:
                 setPreferencesFromResource(R.xml.configuration_thermostat, rootKey);
@@ -334,7 +344,7 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
             }
         });
     }
-    
+
     private void initCommonConfiguration(){
 
         PreferenceScreen dialog = (PreferenceScreen) getPreferenceManager().findPreference("name");

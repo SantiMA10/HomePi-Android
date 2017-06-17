@@ -1,5 +1,6 @@
 package xyz.santima.homepi.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import xyz.santima.homepi.R;
 import xyz.santima.homepi.model.Service;
+import xyz.santima.homepi.ui.activity.AccessoryConfigurationActivity;
 import xyz.santima.homepi.ui.impl.adapter.OwnFirebaseRecyclerAdapter;
 import xyz.santima.homepi.ui.impl.holder.impl.SensorHolder;
 
@@ -75,10 +77,9 @@ public class MainFragment extends Fragment {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                        getActivity().getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.contenedor, AccessoryConfigurationFragment.newInstance(dialog.getItems().indexOf(text)))
-                                .addToBackStack(null).commit();
+                        Intent i = new Intent(getContext(), AccessoryConfigurationActivity.class);
+                        i.putExtra(AccessoryConfigurationActivity.TYPE, dialog.getItems().indexOf(text));
+                        startActivity(i);
 
                         return true;
                     }

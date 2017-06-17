@@ -26,9 +26,9 @@
     </style>
 
     <style name="MyPreferenceTheme" parent="@style/PreferenceThemeOverlay">
-        <item name="android:textColorSecondary">@color/colorAccent</item>
-        <item name="android:textColorPrimary">@color/colorPrimaryDark</item>
-        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textColorSecondary">@color/common_google_signin_btn_text_light</item>
+        <item name="android:textColorPrimary">@color/common_google_signin_btn_text_light</item>
+        <item name="android:textColor">@color/common_google_signin_btn_text_light</item>
     </style>
 
 </resources>

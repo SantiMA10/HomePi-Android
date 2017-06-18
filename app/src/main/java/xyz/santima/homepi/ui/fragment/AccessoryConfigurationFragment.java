@@ -12,6 +12,7 @@ import android.view.View;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -98,19 +99,20 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
     }
 
     private void initThermostatConfiguration() {
-        initConfigSelectorDialogs("actuator", ConfigFactory.getActuatorConfigs(), AbstractConfig.MODE_OBJECT, "actuatorConfig", "actuatorType");
+        initConfigSelectorDialogs(this.config, "actuator", ConfigFactory.getActuatorConfigs(), AbstractConfig.MODE_OBJECT, "actuatorConfig", "actuatorType");
+        initConfigSelectorDialogs(new JSONObject(), "add_sensors", ConfigFactory.getSensorConfigs(), AbstractConfig.MODE_ARRAY, "sensorConfig", "sensorType", "sensors");
     }
 
     private void initTemperatureConfiguration() {
-        initConfigSelectorDialogs("sensor", ConfigFactory.getSensorConfigs(), AbstractConfig.MODE_OBJECT, "sensorConfig", "sensorType");
+        initConfigSelectorDialogs(this.config, "sensor", ConfigFactory.getSensorConfigs(), AbstractConfig.MODE_OBJECT, "sensorConfig", "sensorType");
     }
 
     private void initHumidityConfiguration() {
-        initConfigSelectorDialogs("sensor", ConfigFactory.getSensorConfigs(), AbstractConfig.MODE_OBJECT, "sensorConfig", "sensorType");
+        initConfigSelectorDialogs(this.config, "sensor", ConfigFactory.getSensorConfigs(), AbstractConfig.MODE_OBJECT, "sensorConfig", "sensorType");
     }
 
     private void initLightConfiguration() {
-        initConfigSelectorDialogs("actuator", ConfigFactory.getActuatorConfigs(), AbstractConfig.MODE_OBJECT, "actuatorConfig", "actuatorType");
+        initConfigSelectorDialogs(this.config, "actuator", ConfigFactory.getActuatorConfigs(), AbstractConfig.MODE_OBJECT, "actuatorConfig", "actuatorType");
         PreferenceScreen dialog = (PreferenceScreen) getPreferenceManager().findPreference("status");
         dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -141,7 +143,7 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
     }
 
     private void initGarageConfiguration() {
-        initConfigSelectorDialogs("actuator", ConfigFactory.getActuatorConfigs(), AbstractConfig.MODE_OBJECT, "actuatorConfig", "actuatorType");
+        initConfigSelectorDialogs(this.config, "actuator", ConfigFactory.getActuatorConfigs(), AbstractConfig.MODE_OBJECT, "actuatorConfig", "actuatorType");
         PreferenceScreen dialog = (PreferenceScreen) getPreferenceManager().findPreference("status");
         dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -171,7 +173,11 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
         });
     }
 
-    private void initConfigSelectorDialogs(String preference, final Config[] configs, final int mode, final String paramConfig, final String paramType){
+    private void initConfigSelectorDialogs(JSONObject configObject, String preference, Config[] configs, int mode, String paramConfig, final String paramType){
+        initConfigSelectorDialogs(configObject, preference, configs, mode, paramConfig, paramType, "");
+    }
+
+    private void initConfigSelectorDialogs(final JSONObject configObject, String preference, final Config[] configs, final int mode, final String paramConfig, final String paramType, final String arrayName){
 
         PreferenceScreen dialog = (PreferenceScreen) getPreferenceManager().findPreference(preference);
         dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -183,7 +189,7 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
                         .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                             @Override
                             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                initConfigSelectorDialogs(configs[dialog.getItems().indexOf(text)], mode, paramConfig, paramType);
+                                initConfigSelectorDialogs(configObject, configs[dialog.getItems().indexOf(text)], mode, paramConfig, paramType, arrayName);
 
                                 return true;
                             }
@@ -197,13 +203,14 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
 
     }
 
-    private void initConfigSelectorDialogs(final Config config, final int mode, final String paramConfig, final String paramType){
+    private void initConfigSelectorDialogs(JSONObject configObject, final Config config, final int mode, final String paramConfig, final String paramType, final String arrayName){
 
         CustomMaterialDialogBuilder builder =  new CustomMaterialDialogBuilder(getContext());
         Map<String, String> inputs = config.getInputs(this.config.optJSONObject(paramConfig));
         Set<String> keys = inputs.keySet();
 
-        final JSONObject object = this.config.optInt(paramType, -1) == config.getType() ? this.config : new JSONObject();
+        final JSONObject object = configObject.optInt(paramType, -1) == config.getType() ? configObject : new JSONObject();
+        final JSONObject globalConfig = this.config != null ? this.config : new JSONObject();
 
         for(String key : keys){
             builder.addInput(inputs.get(key), key);
@@ -213,13 +220,24 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
             @Override
             public void onInputs(MaterialDialog dialog, List<CharSequence> inputs, boolean allInputsValidated) {
                 try {
-                    JSONObject config_object = config.addConfig(mode, inputs, object, paramConfig);
-                    config_object.put(paramType, config.getType());
+                    JSONObject config_object = null;
+                    if(mode == AbstractConfig.MODE_OBJECT){
+                        config_object = config.addConfig(mode, inputs, object, paramConfig);
+                        config_object.put(paramType, config.getType());
+                    }
+                    else if(mode == AbstractConfig.MODE_ARRAY){
+                        config_object = config.addConfig(AbstractConfig.MODE_OBJECT, inputs, new JSONObject(), paramConfig);
+                        config_object.put(paramType, config.getType());
+                        JSONArray array = globalConfig.getJSONArray(arrayName);
+                        array.put(config_object);
+                        globalConfig.put(arrayName, array);
+                        config_object = globalConfig;
+                    }
+
                     if(config_object == null){
                         Snackbar.make(getView(), R.string.not_empty, Snackbar.LENGTH_LONG).show();
                     }
                     else{
-                        System.out.println(config_object);
                         activity.setConfig(config_object);
                     }
 

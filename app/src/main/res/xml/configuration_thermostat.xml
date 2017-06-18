@@ -17,16 +17,17 @@
             android:key="room" >
 
         </PreferenceScreen>
-        <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-            android:title="Interruptor"
-            android:summary="Elige el tipo de interruptor que controla este dispositov"
-            android:key="actuator" >
-        </PreferenceScreen>
 
         <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
             android:title="Configuración del interruptor"
             android:summary="Configura el interruptor que controla este dispositov"
-            android:key="actuator_config" >
+            android:key="actuator" >
+        </PreferenceScreen>
+
+        <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+            android:title="Añadir sensor"
+            android:summary="Añade un nuevo sensor a este dispositov"
+            android:key="add_sensors" >
         </PreferenceScreen>
 
         <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"

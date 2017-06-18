@@ -41,15 +41,7 @@ public abstract class AbstractConfig implements Config {
     @Override
     public JSONObject addConfig(int mode, List<CharSequence> inputs, JSONObject object, String param) throws JSONException {
 
-        if(mode == MODE_ARRAY){
-            JSONArray array = object.getJSONArray(param);
-            array.put(prepareJSON(inputs));
-            object.put(param, array);
-        }
-        else if(mode == MODE_OBJECT){
-            object.put(param, prepareJSON(inputs));
-        }
-
+        object.put(param, prepareJSON(inputs));
         return object;
 
     }

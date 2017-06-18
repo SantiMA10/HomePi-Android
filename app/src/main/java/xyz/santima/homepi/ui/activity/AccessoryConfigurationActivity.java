@@ -74,7 +74,6 @@ public class AccessoryConfigurationActivity extends AppCompatActivity {
                     dialog.dismiss();
                     try {
                         config = new JSONObject(new Gson().toJson(dataSnapshot.getValue()));
-                        System.out.println(config);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

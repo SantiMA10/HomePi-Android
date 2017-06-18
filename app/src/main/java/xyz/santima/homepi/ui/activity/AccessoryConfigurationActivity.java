@@ -156,10 +156,10 @@ public class AccessoryConfigurationActivity extends AppCompatActivity {
 
     private void changeFABIcon(boolean notification){
         if(notification){
-            fab.setImageResource(R.drawable.ic_action_bell_off);
+            fab.setImageResource(R.drawable.ic_action_bell);
         }
         else{
-            fab.setImageResource(R.drawable.ic_action_bell);
+            fab.setImageResource(R.drawable.ic_action_bell_off);
         }
     }
 

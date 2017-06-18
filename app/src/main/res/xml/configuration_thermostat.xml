@@ -19,6 +19,13 @@
         </PreferenceScreen>
 
         <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+            android:title="Tiempo de refresco"
+            android:summary="Configura cada cuantos minutos comprueba la temperatura el termostato"
+            android:key="refresh" >
+
+        </PreferenceScreen>
+
+        <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
             android:title="Configuración del interruptor"
             android:summary="Configura el interruptor que controla este dispositov"
             android:key="actuator" >

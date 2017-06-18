@@ -101,6 +101,32 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
     private void initThermostatConfiguration() {
         initConfigSelectorDialogs(this.config, "actuator", ConfigFactory.getActuatorConfigs(), AbstractConfig.MODE_OBJECT, "actuatorConfig", "actuatorType");
         initConfigSelectorDialogs(new JSONObject(), "add_sensors", ConfigFactory.getSensorConfigs(), AbstractConfig.MODE_ARRAY, "sensorConfig", "sensorType", "sensors");
+        PreferenceScreen dialog = (PreferenceScreen) getPreferenceManager().findPreference("refresh");
+        dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new CustomMaterialDialogBuilder(getActivity())
+                        .addInput(config.optString("refreshTime", ""), "Minutos")
+                        .inputs(new CustomMaterialDialogBuilder.CustomInputsCallback() {
+                            @Override
+                            public void onInputs(MaterialDialog dialog, List<CharSequence> inputs, boolean allInputsValidated) {
+                                try {
+                                    if(inputs.size() == 1){
+                                        config.put("refreshTime", Integer.parseInt(""+inputs.get(0)));
+                                        activity.setConfig(config);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        })
+                        .title(R.string.refresh)
+                        .positiveText(R.string.choose)
+                        .show();
+
+                return false;
+            }
+        });
     }
 
     private void initTemperatureConfiguration() {
@@ -134,7 +160,7 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
                                 return true;
                             }
                         })
-                        .positiveText(R.string.create)
+                        .positiveText(R.string.choose)
                         .show();
 
                 return false;
@@ -165,7 +191,7 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
                                 return true;
                             }
                         })
-                        .positiveText(R.string.create)
+                        .positiveText(R.string.choose)
                         .show();
 
                 return false;

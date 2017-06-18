@@ -169,6 +169,7 @@
     <string name="not_empty">No se pueden dejar campos vacios</string>
     <string name="choose">Elegir</string>
     <string name="configure">Configurar</string>
+    <string name="refresh">Tiempo de refresco</string>
 
 
 </resources>

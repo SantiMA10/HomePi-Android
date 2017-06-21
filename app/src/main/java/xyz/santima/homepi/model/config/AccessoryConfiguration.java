@@ -10,7 +10,7 @@ import java.util.Map;
  * Created by GiantsV3 on 17/06/2017.
  */
 
-public interface Config {
+public interface AccessoryConfiguration {
 
     public String getName();
     public int getType();

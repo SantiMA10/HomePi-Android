@@ -3,9 +3,9 @@ package xyz.santima.homepi.business.factory;
 import java.util.ArrayList;
 import java.util.List;
 
-import xyz.santima.homepi.model.config.Config;
-import xyz.santima.homepi.model.config.impl.RestSensorConfig;
-import xyz.santima.homepi.model.config.impl.RestSwitchConfig;
+import xyz.santima.homepi.model.config.AccessoryConfiguration;
+import xyz.santima.homepi.model.config.impl.RestSensorAccessoryConfiguration;
+import xyz.santima.homepi.model.config.impl.RestSwitchAccessoryConfiguration;
 
 /**
  * Created by GiantsV3 on 17/06/2017.
@@ -13,21 +13,21 @@ import xyz.santima.homepi.model.config.impl.RestSwitchConfig;
 
 public class ConfigFactory {
 
-    private static final Config[] sensor_configs = { new RestSensorConfig() };
-    private static final Config[] actuator_configs = { new RestSwitchConfig() };
+    private static final AccessoryConfiguration[] SENSOR___ACCESSORY_CONFIGURATIONs = { new RestSensorAccessoryConfiguration() };
+    private static final AccessoryConfiguration[] ACTUATOR___ACCESSORY_CONFIGURATIONs = { new RestSwitchAccessoryConfiguration() };
 
-    public static Config[] getActuatorConfigs(){
-        return actuator_configs;
+    public static AccessoryConfiguration[] getActuatorConfigs(){
+        return ACTUATOR___ACCESSORY_CONFIGURATIONs;
     }
 
-    public static Config[] getSensorConfigs(){
-        return sensor_configs;
+    public static AccessoryConfiguration[] getSensorConfigs(){
+        return SENSOR___ACCESSORY_CONFIGURATIONs;
     }
 
-    public static CharSequence[] getConfigsNames(Config[] configs){
+    public static CharSequence[] getConfigsNames(AccessoryConfiguration[] accessoryConfigurations){
         List<String> names = new ArrayList<>();
-        for (Config config : configs) {
-            names.add(config.getName());
+        for (AccessoryConfiguration accessoryConfiguration : accessoryConfigurations) {
+            names.add(accessoryConfiguration.getName());
         }
 
         return names.toArray(new CharSequence[names.size()]);

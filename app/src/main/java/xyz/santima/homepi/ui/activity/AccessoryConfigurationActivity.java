@@ -29,19 +29,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import xyz.santima.homepi.R;
-import xyz.santima.homepi.model.Service;
+import xyz.santima.homepi.model.Accessory;
 import xyz.santima.homepi.ui.fragment.AccessoryConfigurationFragment;
 
 public class AccessoryConfigurationActivity extends AppCompatActivity {
 
-    public static final String SERVICE_KEY = "service";
+    public static final String SERVICE_KEY = "accessory";
     public static final String TYPE = "type";
     public static final String REF_KEY = "ref";
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.fab) FloatingActionButton fab;
 
-    Service service;
+    Accessory accessory;
     String key;
     JSONObject config;
     MaterialDialog dialog;
@@ -57,18 +57,18 @@ public class AccessoryConfigurationActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        service = (Service) getIntent().getSerializableExtra(SERVICE_KEY);
+        accessory = (Accessory) getIntent().getSerializableExtra(SERVICE_KEY);
         key = getIntent().getStringExtra(REF_KEY);
 
-        if(service != null){
+        if(accessory != null){
             type = -1;
-            setTitle(service.getName() + " - " + service.getRoom());
+            setTitle(accessory.getName() + " - " + accessory.getRoom());
             dialog = new MaterialDialog.Builder(this)
                     .content(R.string.loading)
                     .progress(true, 0)
                     .show();
 
-            FirebaseDatabase.getInstance().getReference("services/"+service.getKey()+"/config").addListenerForSingleValueEvent(new ValueEventListener() {
+            FirebaseDatabase.getInstance().getReference("services/"+ accessory.getKey()+"/config").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     dialog.dismiss();
@@ -77,7 +77,7 @@ public class AccessoryConfigurationActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    initPreferences(service.getType());
+                    initPreferences(accessory.getType());
                 }
 
                 @Override
@@ -105,14 +105,14 @@ public class AccessoryConfigurationActivity extends AppCompatActivity {
                 .commit();
 
         //Setup fab
-        if(service != null){
-            if(service.getType() != Service.GARAGE && service.getType() != Service.LIGHT
-                    && service.getType() != Service.THERMOSTAT){
+        if(accessory != null){
+            if(accessory.getType() != Accessory.GARAGE && accessory.getType() != Accessory.LIGHT
+                    && accessory.getType() != Accessory.THERMOSTAT){
                 fab.setVisibility(View.INVISIBLE);
             }
             else{
                 boolean contains = false;
-                Map<String, Object> config = service.getConfig();
+                Map<String, Object> config = accessory.getConfig();
                 if(config.containsKey("notification")){
                     contains = ((List<String>)config.get("notification"))
                             .contains(FirebaseInstanceId.getInstance().getToken());
@@ -128,7 +128,7 @@ public class AccessoryConfigurationActivity extends AppCompatActivity {
 
     @OnClick(R.id.fab)
     public void onClickFab(View v){
-        Map<String, Object> config = service.getConfig();
+        Map<String, Object> config = accessory.getConfig();
         if(config.containsKey("notification")){
             List<String> notification = ((List<String>)config.get("notification"));
             if(!notification.contains(FirebaseInstanceId.getInstance().getToken())){
@@ -149,8 +149,8 @@ public class AccessoryConfigurationActivity extends AppCompatActivity {
             config.put("notification", notification);
         }
 
-        service.setConfig(config);
-        FirebaseDatabase.getInstance().getReference("service/" + key).setValue(service);
+        accessory.setConfig(config);
+        FirebaseDatabase.getInstance().getReference("accessory/" + key).setValue(accessory);
     }
 
     private void changeFABIcon(boolean notification){
@@ -189,8 +189,8 @@ public class AccessoryConfigurationActivity extends AppCompatActivity {
     }
 
     public void save(){
-        if(service != null){
-            FirebaseDatabase.getInstance().getReference("services/"+service.getKey()+"/config").setValue(new Gson().fromJson(config.toString(), new TypeToken<HashMap<String, Object>>() {}.getType()));
+        if(accessory != null){
+            FirebaseDatabase.getInstance().getReference("services/"+ accessory.getKey()+"/config").setValue(new Gson().fromJson(config.toString(), new TypeToken<HashMap<String, Object>>() {}.getType()));
         }
         else{
             JSONObject base = new JSONObject();
@@ -224,8 +224,8 @@ public class AccessoryConfigurationActivity extends AppCompatActivity {
 
     public void delete() {
         System.out.print("borrando...");
-        FirebaseDatabase.getInstance().getReference("services/"+service.getKey()).removeValue();
-        FirebaseDatabase.getInstance().getReference("service/"+service.getKey()).removeValue();
+        FirebaseDatabase.getInstance().getReference("services/"+ accessory.getKey()).removeValue();
+        FirebaseDatabase.getInstance().getReference("accessory/"+ accessory.getKey()).removeValue();
         this.finish();
     }
 }

@@ -7,15 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import xyz.santima.homepi.model.config.AbstractConfig;
+import xyz.santima.homepi.model.config.AbstractAccessoryConfiguration;
 
 /**
  * Created by GiantsV3 on 17/06/2017.
  */
 
-public class RestSensorConfig extends AbstractConfig {
+public class RestSensorAccessoryConfiguration extends AbstractAccessoryConfiguration {
 
-    public RestSensorConfig() {
+    public RestSensorAccessoryConfiguration() {
         super("Sensor Rest", 0);
     }
 

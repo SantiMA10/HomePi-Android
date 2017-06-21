@@ -8,7 +8,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import xyz.santima.homepi.R;
-import xyz.santima.homepi.model.Service;
+import xyz.santima.homepi.model.Accessory;
 import xyz.santima.homepi.ui.impl.holder.AbstractBasicHolder;
 
 public class SensorHolder extends AbstractBasicHolder {
@@ -40,8 +40,8 @@ public class SensorHolder extends AbstractBasicHolder {
     }
 
     @Override
-    public void __populate(Service model) {
-        setStatus(model.getType() == Service.SENSOR_HUMIDITY ? model.getStatus() + "%" : model.getStatus() + "º");
+    public void __populate(Accessory model) {
+        setStatus(model.getType() == Accessory.SENSOR_HUMIDITY ? model.getStatus() + "%" : model.getStatus() + "º");
         getCardButton().setText(context.getString(R.string.actualizar));
         getCardButton().setEnabled(true);
     }

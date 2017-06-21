@@ -22,9 +22,9 @@ import java.util.Set;
 
 import xyz.santima.homepi.R;
 import xyz.santima.homepi.business.factory.ConfigFactory;
-import xyz.santima.homepi.model.Service;
-import xyz.santima.homepi.model.config.AbstractConfig;
-import xyz.santima.homepi.model.config.Config;
+import xyz.santima.homepi.model.Accessory;
+import xyz.santima.homepi.model.config.AbstractAccessoryConfiguration;
+import xyz.santima.homepi.model.config.AccessoryConfiguration;
 import xyz.santima.homepi.ui.activity.AccessoryConfigurationActivity;
 import xyz.santima.homepi.ui.impl.component.CustomMaterialDialogBuilder;
 
@@ -62,15 +62,15 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
         config = activity.getConfig();
 
         switch (accessoryType){
-            case Service.GARAGE:
+            case Accessory.GARAGE:
                 setPreferencesFromResource(R.xml.configuration_garage, rootKey);
                 initGarageConfiguration();
                 break;
-            case Service.LIGHT:
+            case Accessory.LIGHT:
                 setPreferencesFromResource(R.xml.configuration_light, rootKey);
                 initLightConfiguration();
                 break;
-            case Service.SENSOR_HUMIDITY:
+            case Accessory.SENSOR_HUMIDITY:
                 setPreferencesFromResource(R.xml.configuration_sensor, rootKey);
                 try {
                     config.put("sensorServiceType", accessoryType);
@@ -79,7 +79,7 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
                 }
                 initHumidityConfiguration();
                 break;
-            case Service.SENSOR_TEMPERATURE:
+            case Accessory.SENSOR_TEMPERATURE:
                 setPreferencesFromResource(R.xml.configuration_sensor, rootKey);
                 initTemperatureConfiguration();
                 try {
@@ -88,7 +88,7 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
                     e.printStackTrace();
                 }
                 break;
-            case Service.THERMOSTAT:
+            case Accessory.THERMOSTAT:
                 setPreferencesFromResource(R.xml.configuration_thermostat, rootKey);
                 initThermostatConfiguration();
                 break;
@@ -99,8 +99,8 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
     }
 
     private void initThermostatConfiguration() {
-        initConfigSelectorDialogs(this.config, "actuator", ConfigFactory.getActuatorConfigs(), AbstractConfig.MODE_OBJECT, "actuatorConfig", "actuatorType");
-        initConfigSelectorDialogs(new JSONObject(), "add_sensors", ConfigFactory.getSensorConfigs(), AbstractConfig.MODE_ARRAY, "sensorConfig", "sensorType", "sensors");
+        initConfigSelectorDialogs(this.config, "actuator", ConfigFactory.getActuatorConfigs(), AbstractAccessoryConfiguration.MODE_OBJECT, "actuatorConfig", "actuatorType");
+        initConfigSelectorDialogs(new JSONObject(), "add_sensors", ConfigFactory.getSensorConfigs(), AbstractAccessoryConfiguration.MODE_ARRAY, "sensorConfig", "sensorType", "sensors");
         PreferenceScreen dialog = (PreferenceScreen) getPreferenceManager().findPreference("refresh");
         dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -130,15 +130,15 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
     }
 
     private void initTemperatureConfiguration() {
-        initConfigSelectorDialogs(this.config, "sensor", ConfigFactory.getSensorConfigs(), AbstractConfig.MODE_OBJECT, "sensorConfig", "sensorType");
+        initConfigSelectorDialogs(this.config, "sensor", ConfigFactory.getSensorConfigs(), AbstractAccessoryConfiguration.MODE_OBJECT, "sensorConfig", "sensorType");
     }
 
     private void initHumidityConfiguration() {
-        initConfigSelectorDialogs(this.config, "sensor", ConfigFactory.getSensorConfigs(), AbstractConfig.MODE_OBJECT, "sensorConfig", "sensorType");
+        initConfigSelectorDialogs(this.config, "sensor", ConfigFactory.getSensorConfigs(), AbstractAccessoryConfiguration.MODE_OBJECT, "sensorConfig", "sensorType");
     }
 
     private void initLightConfiguration() {
-        initConfigSelectorDialogs(this.config, "actuator", ConfigFactory.getActuatorConfigs(), AbstractConfig.MODE_OBJECT, "actuatorConfig", "actuatorType");
+        initConfigSelectorDialogs(this.config, "actuator", ConfigFactory.getActuatorConfigs(), AbstractAccessoryConfiguration.MODE_OBJECT, "actuatorConfig", "actuatorType");
         PreferenceScreen dialog = (PreferenceScreen) getPreferenceManager().findPreference("status");
         dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -169,7 +169,7 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
     }
 
     private void initGarageConfiguration() {
-        initConfigSelectorDialogs(this.config, "actuator", ConfigFactory.getActuatorConfigs(), AbstractConfig.MODE_OBJECT, "actuatorConfig", "actuatorType");
+        initConfigSelectorDialogs(this.config, "actuator", ConfigFactory.getActuatorConfigs(), AbstractAccessoryConfiguration.MODE_OBJECT, "actuatorConfig", "actuatorType");
         PreferenceScreen dialog = (PreferenceScreen) getPreferenceManager().findPreference("status");
         dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -199,11 +199,11 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
         });
     }
 
-    private void initConfigSelectorDialogs(JSONObject configObject, String preference, Config[] configs, int mode, String paramConfig, final String paramType){
-        initConfigSelectorDialogs(configObject, preference, configs, mode, paramConfig, paramType, "");
+    private void initConfigSelectorDialogs(JSONObject configObject, String preference, AccessoryConfiguration[] accessoryConfigurations, int mode, String paramConfig, final String paramType){
+        initConfigSelectorDialogs(configObject, preference, accessoryConfigurations, mode, paramConfig, paramType, "");
     }
 
-    private void initConfigSelectorDialogs(final JSONObject configObject, String preference, final Config[] configs, final int mode, final String paramConfig, final String paramType, final String arrayName){
+    private void initConfigSelectorDialogs(final JSONObject configObject, String preference, final AccessoryConfiguration[] accessoryConfigurations, final int mode, final String paramConfig, final String paramType, final String arrayName){
 
         PreferenceScreen dialog = (PreferenceScreen) getPreferenceManager().findPreference(preference);
         dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -211,11 +211,11 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceClick(Preference preference) {
                 new MaterialDialog.Builder(getActivity())
                         .title(R.string.status)
-                        .items(ConfigFactory.getConfigsNames(configs))
+                        .items(ConfigFactory.getConfigsNames(accessoryConfigurations))
                         .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                             @Override
                             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                initConfigSelectorDialogs(configObject, configs[dialog.getItems().indexOf(text)], mode, paramConfig, paramType, arrayName);
+                                initConfigSelectorDialogs(configObject, accessoryConfigurations[dialog.getItems().indexOf(text)], mode, paramConfig, paramType, arrayName);
 
                                 return true;
                             }
@@ -229,13 +229,13 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
 
     }
 
-    private void initConfigSelectorDialogs(JSONObject configObject, final Config config, final int mode, final String paramConfig, final String paramType, final String arrayName){
+    private void initConfigSelectorDialogs(JSONObject configObject, final AccessoryConfiguration accessoryConfiguration, final int mode, final String paramConfig, final String paramType, final String arrayName){
 
         CustomMaterialDialogBuilder builder =  new CustomMaterialDialogBuilder(getContext());
-        Map<String, String> inputs = config.getInputs(this.config.optJSONObject(paramConfig));
+        Map<String, String> inputs = accessoryConfiguration.getInputs(this.config.optJSONObject(paramConfig));
         Set<String> keys = inputs.keySet();
 
-        final JSONObject object = configObject.optInt(paramType, -1) == config.getType() ? configObject : new JSONObject();
+        final JSONObject object = configObject.optInt(paramType, -1) == accessoryConfiguration.getType() ? configObject : new JSONObject();
         final JSONObject globalConfig = this.config != null ? this.config : new JSONObject();
 
         for(String key : keys){
@@ -247,13 +247,13 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
             public void onInputs(MaterialDialog dialog, List<CharSequence> inputs, boolean allInputsValidated) {
                 try {
                     JSONObject config_object = null;
-                    if(mode == AbstractConfig.MODE_OBJECT){
-                        config_object = config.addConfig(mode, inputs, object, paramConfig);
-                        config_object.put(paramType, config.getType());
+                    if(mode == AbstractAccessoryConfiguration.MODE_OBJECT){
+                        config_object = accessoryConfiguration.addConfig(mode, inputs, object, paramConfig);
+                        config_object.put(paramType, accessoryConfiguration.getType());
                     }
-                    else if(mode == AbstractConfig.MODE_ARRAY){
-                        config_object = config.addConfig(AbstractConfig.MODE_OBJECT, inputs, new JSONObject(), paramConfig);
-                        config_object.put(paramType, config.getType());
+                    else if(mode == AbstractAccessoryConfiguration.MODE_ARRAY){
+                        config_object = accessoryConfiguration.addConfig(AbstractAccessoryConfiguration.MODE_OBJECT, inputs, new JSONObject(), paramConfig);
+                        config_object.put(paramType, accessoryConfiguration.getType());
                         JSONArray array = globalConfig.getJSONArray(arrayName);
                         array.put(config_object);
                         globalConfig.put(arrayName, array);
@@ -273,7 +273,7 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
             }
         });
 
-        builder.positiveText(R.string.save).title(getString(R.string.configure) + config.getName()).build().show();
+        builder.positiveText(R.string.save).title(getString(R.string.configure) + accessoryConfiguration.getName()).build().show();
 
     }
 

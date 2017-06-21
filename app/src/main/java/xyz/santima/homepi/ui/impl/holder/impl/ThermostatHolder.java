@@ -13,7 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import xyz.santima.homepi.R;
-import xyz.santima.homepi.model.Service;
+import xyz.santima.homepi.model.Accessory;
 import xyz.santima.homepi.ui.impl.holder.AbstractBasicHolder;
 
 public class ThermostatHolder extends AbstractBasicHolder {
@@ -43,13 +43,13 @@ public class ThermostatHolder extends AbstractBasicHolder {
     }
 
     @Override
-    public void __populate(Service service) {
-        setDate(service.getFormatDate());
-        setPlace(service.getRoom());
+    public void __populate(Accessory accessory) {
+        setDate(accessory.getFormatDate());
+        setPlace(accessory.getRoom());
 
-        card_status.setText(service.getStatus() + "º");
+        card_status.setText(accessory.getStatus() + "º");
 
-        if(service.isWorking()){
+        if(accessory.isWorking()){
             card_button.setText(context.getString(R.string.apagar));
         }
         else{
@@ -58,31 +58,31 @@ public class ThermostatHolder extends AbstractBasicHolder {
     }
 
     @Override
-    public void populate(Service model, DatabaseReference ref) {
+    public void populate(Accessory model, DatabaseReference ref) {
         this.ref = ref;
-        this.service = model;
+        this.accessory = model;
 
-        __populate(service);
+        __populate(accessory);
         //super.populate(model, ref);
     }
 
     @OnClick(R.id.card_update_button)
     public void changeWorking(View view){
-        service.setUser(FirebaseInstanceId.getInstance().getToken());
-        service.setWorking(!service.isWorking());
-        ref.setValue(service);
+        accessory.setUser(FirebaseInstanceId.getInstance().getToken());
+        accessory.setWorking(!accessory.isWorking());
+        ref.setValue(accessory);
     }
 
     @OnClick(R.id.card_button_plus)
     public void plus(View view){
-        service.setStatus(Integer.parseInt(service.getStatus()) + 1);
-        ref.setValue(service);
+        accessory.setStatus(Integer.parseInt(accessory.getStatus()) + 1);
+        ref.setValue(accessory);
     }
 
     @OnClick(R.id.card_button_less)
     public void less(View view){
-        service.setStatus(Integer.parseInt(service.getStatus()) - 1);
-        ref.setValue(service);
+        accessory.setStatus(Integer.parseInt(accessory.getStatus()) - 1);
+        ref.setValue(accessory);
     }
 
 

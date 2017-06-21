@@ -17,7 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import xyz.santima.homepi.R;
-import xyz.santima.homepi.model.Service;
+import xyz.santima.homepi.model.Accessory;
 import xyz.santima.homepi.ui.activity.AccessoryConfigurationActivity;
 import xyz.santima.homepi.ui.impl.adapter.OwnFirebaseRecyclerAdapter;
 import xyz.santima.homepi.ui.impl.holder.impl.SensorHolder;
@@ -92,9 +92,9 @@ public class MainFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/service");
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/accessory");
 
-        recyclerView.setAdapter(new OwnFirebaseRecyclerAdapter(Service.class, R.layout.text_status_card, SensorHolder.class, ref));
+        recyclerView.setAdapter(new OwnFirebaseRecyclerAdapter(Accessory.class, R.layout.text_status_card, SensorHolder.class, ref));
     }
 
 }

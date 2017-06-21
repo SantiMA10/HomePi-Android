@@ -11,14 +11,14 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import butterknife.OnClick;
 import xyz.santima.homepi.R;
-import xyz.santima.homepi.model.Service;
+import xyz.santima.homepi.model.Accessory;
 import xyz.santima.homepi.ui.activity.AccessoryConfigurationActivity;
 
 public abstract class AbstractBasicHolder extends RecyclerView.ViewHolder implements BasicHolder  {
 
     protected Context context;
     protected DatabaseReference ref;
-    protected Service service;
+    protected Accessory accessory;
 
     public AbstractBasicHolder(View itemView) {
         super(itemView);
@@ -27,23 +27,23 @@ public abstract class AbstractBasicHolder extends RecyclerView.ViewHolder implem
     public abstract void setDate(String date);
     public abstract void setPlace(String place);
     public abstract Button getCardButton();
-    public abstract void __populate(Service service);
+    public abstract void __populate(Accessory accessory);
 
     @OnClick(R.id.card)
     public void showConfiguration(View v) {
         Intent i = new Intent(v.getContext(), AccessoryConfigurationActivity.class);
-        i.putExtra(AccessoryConfigurationActivity.SERVICE_KEY, service);
+        i.putExtra(AccessoryConfigurationActivity.SERVICE_KEY, accessory);
         i.putExtra(AccessoryConfigurationActivity.REF_KEY, ref.getKey());
         v.getContext().startActivity(i);
     }
 
-    public void populate(Service service, DatabaseReference ref){
-        __populate(service);
-        setupCard(service, ref);
+    public void populate(Accessory accessory, DatabaseReference ref){
+        __populate(accessory);
+        setupCard(accessory, ref);
     }
 
-    private void setupCard(final Service model, final DatabaseReference ref) {
-        this.service = model;
+    private void setupCard(final Accessory model, final DatabaseReference ref) {
+        this.accessory = model;
         this.ref = ref;
         setDate(model.getFormatDate());
         setPlace(model.getRoom());

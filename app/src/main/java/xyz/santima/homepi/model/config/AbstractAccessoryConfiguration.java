@@ -1,19 +1,15 @@
 package xyz.santima.homepi.model.config;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
-import java.util.Map;
-
-import xyz.santima.homepi.model.config.Config;
 
 /**
  * Created by GiantsV3 on 17/06/2017.
  */
 
-public abstract class AbstractConfig implements Config {
+public abstract class AbstractAccessoryConfiguration implements AccessoryConfiguration {
 
     public static final int MODE_ARRAY = 0;
     public static final int MODE_OBJECT = 1;
@@ -21,7 +17,7 @@ public abstract class AbstractConfig implements Config {
     protected String name;
     protected int type;
 
-    public AbstractConfig(String name, int type){
+    public AbstractAccessoryConfiguration(String name, int type){
         this.name = name;
         this.type = type;
     }

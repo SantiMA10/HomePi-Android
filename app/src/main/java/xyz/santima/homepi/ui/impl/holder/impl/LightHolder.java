@@ -9,7 +9,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import xyz.santima.homepi.R;
-import xyz.santima.homepi.model.Service;
+import xyz.santima.homepi.model.Accessory;
 import xyz.santima.homepi.ui.impl.holder.AbstractBasicHolder;
 
 public class LightHolder extends AbstractBasicHolder {
@@ -37,7 +37,7 @@ public class LightHolder extends AbstractBasicHolder {
     }
 
     @Override
-    public void __populate(Service model) {
+    public void __populate(Accessory model) {
         boolean encendida = Boolean.parseBoolean(model.getStatus());
         if(encendida){
             card_status.setImageResource(R.drawable.light_on);

@@ -1,7 +1,5 @@
 package xyz.santima.homepi.model.config.impl;
 
-import android.support.design.widget.Snackbar;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -9,16 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import xyz.santima.homepi.R;
-import xyz.santima.homepi.model.config.AbstractConfig;
+import xyz.santima.homepi.model.config.AbstractAccessoryConfiguration;
 
 /**
  * Created by GiantsV3 on 17/06/2017.
  */
 
-public class RestSwitchConfig extends AbstractConfig {
+public class RestSwitchAccessoryConfiguration extends AbstractAccessoryConfiguration {
 
-    public RestSwitchConfig() {
+    public RestSwitchAccessoryConfiguration() {
         super("Interruptor Rest", 0);
     }
 

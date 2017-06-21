@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
-public class Service implements Serializable {
+public class Accessory implements Serializable {
 
     public static final int GARAGE = 0;
     public static final int SENSOR_TEMPERATURE = 1;
@@ -26,11 +26,11 @@ public class Service implements Serializable {
 
     private Map<String, Object> config;
 
-    public Service() {
+    public Accessory() {
         config = new HashMap<>();
     }
 
-    public Service(String date, String status, int type, String user, boolean working, String room, String key, String name) {
+    public Accessory(String date, String status, int type, String user, boolean working, String room, String key, String name) {
         this.date = date;
         this.status = status;
         this.type = type;

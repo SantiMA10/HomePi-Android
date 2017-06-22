@@ -92,7 +92,7 @@ public class MainFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/accessory");
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("/service");
 
         recyclerView.setAdapter(new OwnFirebaseRecyclerAdapter(Accessory.class, R.layout.text_status_card, SensorHolder.class, ref));
     }

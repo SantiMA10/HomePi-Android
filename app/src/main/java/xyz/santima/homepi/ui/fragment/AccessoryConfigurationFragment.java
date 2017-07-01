@@ -53,7 +53,7 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
     }
 
     @Override
-    public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
+        public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
 
         if (getArguments() != null) {
             accessoryType = getArguments().getInt(ACCESSORY_TYPE_KEY);

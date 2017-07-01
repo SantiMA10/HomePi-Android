@@ -1,0 +1,12 @@
+xyz.santima.homepi
+xyz.santima.homepi.business.factory
+xyz.santima.homepi.business.service
+xyz.santima.homepi.model
+xyz.santima.homepi.model.config
+xyz.santima.homepi.model.config.impl
+xyz.santima.homepi.ui.activity
+xyz.santima.homepi.ui.fragment
+xyz.santima.homepi.ui.impl.adapter
+xyz.santima.homepi.ui.impl.component
+xyz.santima.homepi.ui.impl.holder
+xyz.santima.homepi.ui.impl.holder.impl

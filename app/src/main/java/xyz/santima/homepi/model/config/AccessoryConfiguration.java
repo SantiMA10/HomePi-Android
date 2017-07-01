@@ -12,9 +12,34 @@ import java.util.Map;
 
 public interface AccessoryConfiguration {
 
+    /**
+     * Metodo para obtener el nombre del sensor o actuador a configurar
+     * @return
+     */
     public String getName();
+
+    /**
+     * Método para obtener el tipo del sensor o actuador a configurar
+     * @return
+     */
     public int getType();
+
+    /**
+     * Metodo para obtener una lista de los campos necesarios para configurar el sensor o actuador
+     * @param object
+     * @return
+     */
     public Map<String, String> getInputs(JSONObject object);
+
+    /**
+     * Metodo para guardar la configuración del sensor o actuador
+     * @param mode
+     * @param inputs
+     * @param object
+     * @param param
+     * @return
+     * @throws JSONException
+     */
     public JSONObject addConfig(int mode, List<CharSequence> inputs, JSONObject object, String param) throws JSONException;
 
 }

@@ -16,6 +16,10 @@ public class OwnFirebaseMessagingService extends FirebaseMessagingService {
 
     private static String TAG = "OwnMessagingService";
 
+    /**
+     * Método que generara la notificación para Android apartir del mensaje de Firebase Cloud Messaging
+     * @param remoteMessage
+     */
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         // ...

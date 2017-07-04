@@ -150,7 +150,7 @@ public class AccessoryConfigurationActivity extends AppCompatActivity {
         }
 
         accessory.setConfig(config);
-        FirebaseDatabase.getInstance().getReference("accessory/" + key).setValue(accessory);
+        FirebaseDatabase.getInstance().getReference("service/" + key).setValue(accessory);
     }
 
     private void changeFABIcon(boolean notification){
@@ -210,6 +210,7 @@ public class AccessoryConfigurationActivity extends AppCompatActivity {
     }
 
     public void setConfig(JSONObject config) {
+        System.out.println(config);
         unsaved();
         this.config = config;
     }
@@ -223,9 +224,8 @@ public class AccessoryConfigurationActivity extends AppCompatActivity {
     }
 
     public void delete() {
-        System.out.print("borrando...");
         FirebaseDatabase.getInstance().getReference("services/"+ accessory.getKey()).removeValue();
-        FirebaseDatabase.getInstance().getReference("accessory/"+ accessory.getKey()).removeValue();
+        FirebaseDatabase.getInstance().getReference("service/"+ accessory.getKey()).removeValue();
         this.finish();
     }
 }

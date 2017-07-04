@@ -1,6 +1,7 @@
 package xyz.santima.homepi.ui.fragment;
 
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -169,7 +170,8 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
     }
 
     private void initGarageConfiguration() {
-        initConfigSelectorDialogs(this.config, "actuator", ConfigFactory.getActuatorConfigs(), AbstractAccessoryConfiguration.MODE_OBJECT, "actuatorConfig", "actuatorType");
+        initConfigSelectorDialogs(config, "actuator", ConfigFactory.getActuatorConfigs(), AbstractAccessoryConfiguration.MODE_OBJECT, "actuatorConfig", "actuatorType");
+        initConfigSelectorDialogs(config, "sensor", ConfigFactory.getSensorConfigs(), AbstractAccessoryConfiguration.MODE_OBJECT, "sensorConfig", "sensorType");
         PreferenceScreen dialog = (PreferenceScreen) getPreferenceManager().findPreference("status");
         dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -229,14 +231,13 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
 
     }
 
-    private void initConfigSelectorDialogs(JSONObject configObject, final AccessoryConfiguration accessoryConfiguration, final int mode, final String paramConfig, final String paramType, final String arrayName){
+    private void initConfigSelectorDialogs(final JSONObject configObject, final AccessoryConfiguration accessoryConfiguration, final int mode, final String paramConfig, final String paramType, final String arrayName){
 
         CustomMaterialDialogBuilder builder =  new CustomMaterialDialogBuilder(getContext());
-        Map<String, String> inputs = accessoryConfiguration.getInputs(this.config.optJSONObject(paramConfig));
+        Map<String, String> inputs = accessoryConfiguration.getInputs(config.optJSONObject(paramConfig));
         Set<String> keys = inputs.keySet();
 
-        final JSONObject object = configObject.optInt(paramType, -1) == accessoryConfiguration.getType() ? configObject : new JSONObject();
-        final JSONObject globalConfig = this.config != null ? this.config : new JSONObject();
+        final JSONObject globalConfig = config != null ? config : new JSONObject();
 
         for(String key : keys){
             builder.addInput(inputs.get(key), key);
@@ -248,6 +249,7 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
                 try {
                     JSONObject config_object = null;
                     if(mode == AbstractAccessoryConfiguration.MODE_OBJECT){
+                        JSONObject object = arrayName.equals("") ? configObject : new JSONObject();
                         config_object = accessoryConfiguration.addConfig(mode, inputs, object, paramConfig);
                         config_object.put(paramType, accessoryConfiguration.getType());
                     }

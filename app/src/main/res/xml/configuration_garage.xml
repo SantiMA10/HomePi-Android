@@ -25,6 +25,12 @@
         </PreferenceScreen>
 
         <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+            android:title="Configuración del Sensor"
+            android:summary="Configura el sensor que controla este dispositivo"
+            android:key="sensor" >
+        </PreferenceScreen>
+
+        <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
             android:title="Configuración del interruptor"
             android:summary="Configura el interruptor que controla este dispositov"
             android:key="actuator" >

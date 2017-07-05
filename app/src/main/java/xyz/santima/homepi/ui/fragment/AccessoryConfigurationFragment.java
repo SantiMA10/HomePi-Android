@@ -140,6 +140,8 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
 
     private void initLightConfiguration() {
         initConfigSelectorDialogs(this.config, "actuator", ConfigFactory.getActuatorConfigs(), AbstractAccessoryConfiguration.MODE_OBJECT, "actuatorConfig", "actuatorType");
+        initConfigSelectorDialogs(config, "sensor", ConfigFactory.getSensorConfigs(), AbstractAccessoryConfiguration.MODE_OBJECT, "sensorConfig", "sensorType");
+
         PreferenceScreen dialog = (PreferenceScreen) getPreferenceManager().findPreference("status");
         dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -163,6 +165,34 @@ public class AccessoryConfigurationFragment extends PreferenceFragmentCompat {
                         })
                         .positiveText(R.string.choose)
                         .show();
+
+                return false;
+            }
+        });
+
+        dialog = (PreferenceScreen) getPreferenceManager().findPreference("photoresistor");
+
+        dialog.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new CustomMaterialDialogBuilder(getContext())
+                        .addInput(config.optString("photoresistorOnValue", ""),"Valor de fotorresistor cuando esta encendida la luz")
+                        .inputs(new CustomMaterialDialogBuilder.CustomInputsCallback() {
+                            @Override
+                            public void onInputs(MaterialDialog dialog, List<CharSequence> inputs, boolean allInputsValidated) {
+                                if(inputs.size() == 1){
+                                    try {
+                                        config.put("photoresistorOnValue", inputs.get(0));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                activity.setConfig(config);
+                            }
+                        })
+                        .title("Fotorresistor")
+                        .positiveText(R.string.save)
+                        .build().show();
 
                 return false;
             }
